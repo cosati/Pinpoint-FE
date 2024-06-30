@@ -27,7 +27,6 @@ export class MapComponent implements AfterViewInit {
         }
         console.log("Clicked on", ev.latlng);
         this.mapClick.emit(ev.latlng);
-        // TODO: Make markable dragable (, {draggable:true}).
         this.marker = 
           new L
             .Marker(ev.latlng, {draggable:true})
