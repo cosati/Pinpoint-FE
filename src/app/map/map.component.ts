@@ -36,7 +36,12 @@ export class MapComponent implements AfterViewInit {
             })
             .addTo(this.map);
       }
-    );
+    ).on('contextmenu', (event) => {
+      console.log(event);
+      if (this.marker) {
+        this.marker.removeFrom(this.map);
+      }
+    });
 
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
