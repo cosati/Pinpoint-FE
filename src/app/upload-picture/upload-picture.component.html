@@ -1,0 +1,40 @@
+<div class="card">    
+    <div class="card-body">
+        <h5 class="card-title">Upload New Picture</h5>
+        <form (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+                <input class="form-control" type="file" id="formFile" (change)="onChange($event)" #inputFile>
+            </div>
+
+            <p>
+                <label for="title" class="form-label">Title</label>
+                <input [(ngModel)]="picture.name" type="text" class="form-control" id="title" name="title" />
+            </p>
+
+            <p>
+                <label for="description" class="form-label">Description</label>
+                <textarea [(ngModel)]="picture.description" class="form-control" id="description" name="description"></textarea>
+            </p>
+
+            <p>
+                <label for="date" class="form-label">Date</label>
+                <input [(ngModel)]="picture.date" type="date" class="form-control" id="date" name="date" />
+            </p>
+            
+            <p>
+                <label for="latitude" class="form-label">Latitude</label>
+                <input [(ngModel)]="picture.latitude" type="number" class="form-control" id="latitude" name="latitude" />
+            </p>
+            <p>
+                <label for="logitude" class="form-label">Longitude</label>
+                <input [(ngModel)]="picture.longitude" type="number" class="form-control" id="logitude" name="logitude" />
+            </p>
+
+
+            <p class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="button" class="btn btn-outline-primary" (click)="onCancel()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </p>
+        </form>
+    </div>
+</div>

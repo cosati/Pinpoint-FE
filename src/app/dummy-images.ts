@@ -1,0 +1,38 @@
+export const DUMMY_IMAGES = [
+    {
+        id: '1',
+        name: 'Paris',
+        description: 'La Tour Eiffel',
+        path: 'paris.jpg',
+        date: new Date('2023-10-26'),
+        latitude: 48.8566,
+        longitude: 2.3522,
+    },
+    {
+        id: '2',
+        name: 'Krakow',
+        description: 'Wawel Castle',
+        path: 'wawel.jpg',
+        date: new Date('2023-07-20'),
+        latitude: 50.0647,
+        longitude: 19.9478,
+    },
+    {
+        id: '3',
+        name: 'Gdansk',
+        description: 'Westerplate',
+        path: 'gdansk.jpg',
+        date: new Date('2022-02-13'),
+        latitude: 54.3522,
+        longitude: 18.6917,
+    },
+    {
+        id: '4',
+        name: 'Zakopane',
+        description: 'Morskie Oko',
+        path: 'tatry.jpg',
+        date: new Date('2024-05-22'),
+        latitude: 49.2992,
+        longitude: 19.9742,
+    },
+]
