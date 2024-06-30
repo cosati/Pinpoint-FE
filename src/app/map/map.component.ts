@@ -30,8 +30,8 @@ export class MapComponent implements AfterViewInit {
         this.marker = 
           new L
             .Marker(ev.latlng, {draggable:true})
-            .on('dragend', (event) => {
-              console.log("Dragged to", event.target.getLatLng())
+            .on('drag', (event) => {
+              console.log("Dragging to", event.target.getLatLng())
               this.mapClick.emit(event.target.getLatLng())
             })
             .addTo(this.map);
