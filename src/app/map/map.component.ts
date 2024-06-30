@@ -20,28 +20,8 @@ export class MapComponent implements AfterViewInit {
       // TODO: Initialize map according to loaded pictures positions.
       center: [ 39.8282, -98.5795 ],
       zoom: 3
-    }).on(
-      'click', (ev) => {
-        if (this.marker != null) {
-          this.marker.removeFrom(this.map);
-        }
-        console.log("Clicked on", ev.latlng);
-        this.mapClick.emit(ev.latlng);
-        this.marker = 
-          new L
-            .Marker(ev.latlng, {draggable:true})
-            .on('drag', (event) => {
-              console.log("Dragging to", event.target.getLatLng())
-              this.mapClick.emit(event.target.getLatLng())
-            })
-            .addTo(this.map);
-      }
-    ).on('contextmenu', (event) => {
-      console.log(event);
-      if (this.marker) {
-        this.marker.removeFrom(this.map);
-      }
-    });
+    }).on('click', (event) => this.addTemporaryMarker(event)
+    ).on('contextmenu', () => this.removeTemporaryMarker());
 
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
@@ -50,6 +30,30 @@ export class MapComponent implements AfterViewInit {
     });
 
     tiles.addTo(this.map);
+  }
+
+  private addTemporaryMarker(event: L.LeafletMouseEvent) {
+    console.log("Clicked on", event.latlng);
+    this.removeTemporaryMarker();
+    this.mapClick.emit(event.latlng);
+    this.insertTemporaryMarkerIntoMap(event);
+  }
+
+  private insertTemporaryMarkerIntoMap(event: L.LeafletMouseEvent) {
+    this.marker =
+      new L
+        .Marker(event.latlng, { draggable: true })
+        .on('drag', (event) => {
+          console.log("Dragging to", event.target.getLatLng());
+          this.mapClick.emit(event.target.getLatLng());
+        })
+        .addTo(this.map);
+  }
+
+  private removeTemporaryMarker() {
+    if (this.marker != null) {
+      this.marker.removeFrom(this.map);
+    }
   }
 
   private plotLocations(): void {
