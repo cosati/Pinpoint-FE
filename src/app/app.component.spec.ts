@@ -31,7 +31,7 @@ describe('AppComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
-    component = new AppComponent;
+    component = fixture.componentInstance;
     fixture.detectChanges();
 
     uploadComponentSpy = 
