@@ -54,6 +54,7 @@ export class MapComponent implements AfterViewInit {
     if (this.marker != null) {
       this.marker.removeFrom(this.map);
     }
+    this.mapClick.emit(L.latLng(0, 0));
   }
 
   private plotLocations(): void {
