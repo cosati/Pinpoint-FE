@@ -13,15 +13,25 @@ describe('UploadPictureComponent', () => {
 
   let addSpy: jasmine.SpyObj<EventEmitter<Picture>>;
 
-  const picture: Picture = {
+  const pristinePicture: Picture = {
     name: "",
     description: "",
     id: '',
     path: '',
-    date: new Date(),
+    date: undefined,
     latitude: 0,
     longitude: 0
   }
+
+  const picture: Picture = {
+    id: '4',
+    name: 'Zakopane',
+    description: 'Morskie Oko',
+    path: 'tatry.jpg',
+    date: new Date('2024-05-22'),
+    latitude: 49.2992,
+    longitude: 19.9742,
+}
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -58,5 +68,13 @@ describe('UploadPictureComponent', () => {
 
     expect(component.picture.latitude).toBe(expectedCoordinates.lat);
     expect(component.picture.longitude).toBe(expectedCoordinates.lng);
+  });
+
+  it('should clear picture data on cancel', () => {
+    component.picture = picture;
+
+    component.onCancel();
+
+    expect(component.picture).toEqual(pristinePicture);
   });
 });

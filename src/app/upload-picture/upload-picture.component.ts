@@ -23,7 +23,7 @@ export class UploadPictureComponent {
     description: "",
     id: '',
     path: '',
-    date: new Date(),
+    date: undefined,
     latitude: 0,
     longitude: 0
   }
@@ -52,6 +52,13 @@ export class UploadPictureComponent {
   onCancel() {
     console.log("Clearing up form.");
     this.file = null;
+    this.picture.name = "";
+    this.picture.description = "";
+    this.picture.path = "";
+    this.picture.id = "";
+    this.picture.date = undefined;
+    this.picture.latitude = 0;
+    this.picture.longitude = 0;
   }
 
   public setCoordinates(coordinates: L.LatLng) {
