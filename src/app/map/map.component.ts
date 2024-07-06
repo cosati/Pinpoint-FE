@@ -2,6 +2,9 @@ import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/
 import * as L from 'leaflet';
 import { Picture } from '../models/picture.model';
 
+const MAX_ZOOM = 18;
+const MIN_ZOOM = 2;
+
 @Component({
   selector: 'app-map',
   standalone: true,
@@ -12,20 +15,23 @@ import { Picture } from '../models/picture.model';
 export class MapComponent implements AfterViewInit {
   @Input() pictureData: Picture[] = [];
   @Output() mapClick = new EventEmitter<L.LatLng>();
+
   private map: any;
   private marker: L.Marker | null = null;
   
   private initMap(): void {
     this.map = L.map('map', {
       // TODO: Initialize map according to loaded pictures positions.
-      center: [ 39.8282, -98.5795 ],
+      center: [0, 0],
       zoom: 3
-    }).on('click', (event) => this.addTemporaryMarker(event)
+    })
+    .fitBounds(this.getPicturesBounds())
+    .on('click', (event) => this.addTemporaryMarker(event)
     ).on('contextmenu', () => this.removeTemporaryMarker());
 
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 18,
-      minZoom: 2,
+      maxZoom: MAX_ZOOM,
+      minZoom: MIN_ZOOM,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     });
 
@@ -69,6 +75,28 @@ export class MapComponent implements AfterViewInit {
       .bindTooltip(picture.description)
       .bindPopup("<img src='assets/pictures/" + picture.path + "' width='50' height='50' />")
       .addTo(this.map);
+  }
+
+  private getPicturesBounds(): L.LatLngBounds {
+    let maxLatitude = this.pictureData[0].latitude;
+    let minLatitude = this.pictureData[0].latitude;
+    let maxLongitude = this.pictureData[0].longitude;
+    let minLongitude = this.pictureData[0].longitude;
+    for (const picture of this.pictureData) {
+      if (picture.latitude > maxLatitude) {
+        maxLatitude = picture.latitude;
+      }
+      if (picture.latitude < minLatitude) {
+        minLatitude = picture.latitude;
+      }
+      if (picture.longitude > maxLongitude) {
+        maxLongitude = picture.longitude;
+      }
+      if (picture.longitude < minLongitude) {
+        minLongitude = picture.longitude;
+      }
+    }
+    return L.latLngBounds(L.latLng(minLatitude, minLongitude), L.latLng(maxLatitude, maxLongitude));
   }
 
   ngAfterViewInit() {

@@ -35,4 +35,13 @@ export const DUMMY_IMAGES = [
         latitude: 49.2992,
         longitude: 19.9742,
     },
+    {
+        id: '5',
+        name: 'Rio de Janeiro',
+        description: 'Cristo Redentor',
+        path: 'cristo.jpg',
+        date: new Date('2024-05-22'),
+        latitude: -22.9068,
+        longitude: -43.1729,
+    },
 ]
