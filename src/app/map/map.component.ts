@@ -77,10 +77,10 @@ export class MapComponent implements AfterViewInit {
   }
 
   private getPicturesBounds(): L.LatLngBounds {
-    let maxLatitude = this.pictureData[0].latitude;
-    let minLatitude = this.pictureData[0].latitude;
-    let maxLongitude = this.pictureData[0].longitude;
-    let minLongitude = this.pictureData[0].longitude;
+    let maxLatitude = this.pictureData[0] ? this.pictureData[0].latitude : 0;
+    let minLatitude = maxLatitude;
+    let maxLongitude = this.pictureData[0] ? this.pictureData[0].longitude : 0;
+    let minLongitude = maxLongitude;
     for (const picture of this.pictureData) {
       if (picture.latitude > maxLatitude) {
         maxLatitude = picture.latitude;
