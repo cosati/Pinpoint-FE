@@ -23,11 +23,25 @@
             
             <p>
                 <label for="latitude" class="form-label">Latitude</label>
-                <input [(ngModel)]="picture.latitude" type="number" class="form-control" id="latitude" name="latitude" />
+                <input 
+                    [(ngModel)]="picture.latitude" 
+                    type="number" 
+                    min="-90"
+                    max="90"
+                    class="form-control" 
+                    id="latitude" 
+                    name="latitude" />
             </p>
             <p>
                 <label for="logitude" class="form-label">Longitude</label>
-                <input [(ngModel)]="picture.longitude" type="number" class="form-control" id="logitude" name="logitude" />
+                <input 
+                    [(ngModel)]="picture.longitude" 
+                    type="number" 
+                    min="-180"
+                    max="180"
+                    class="form-control" 
+                    id="logitude" 
+                    name="logitude" />
             </p>
 
 
