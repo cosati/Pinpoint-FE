@@ -21,13 +21,12 @@ export class MapComponent implements AfterViewInit {
   
   private initMap(): void {
     this.map = L.map('map', {
-      // TODO: Initialize map according to loaded pictures positions.
       center: [0, 0],
       zoom: 3
     })
     .fitBounds(this.getPicturesBounds())
-    .on('click', (event) => this.addTemporaryMarker(event)
-    ).on('contextmenu', () => this.removeTemporaryMarker());
+    .on('click', (event) => this.addTemporaryMarker(event))
+    .on('contextmenu', () => this.removeTemporaryMarker());
 
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: MAX_ZOOM,
