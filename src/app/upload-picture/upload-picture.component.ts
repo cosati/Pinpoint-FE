@@ -58,7 +58,6 @@ export class UploadPictureComponent {
 
   onCancel() {
     console.log("Clearing up form.");
-    console.log(this.pictureForm.controls['title'].errors);
     this.file = null;
     this.pictureForm.controls['title'].setValue("");
     this.pictureForm.controls['description'].setValue("");

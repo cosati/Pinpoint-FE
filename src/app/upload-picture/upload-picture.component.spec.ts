@@ -90,27 +90,19 @@ describe('UploadPictureComponent', () => {
     expect(titleInput.errors!['minlength']).toBeTruthy();
   });
 
-  // it('should set coordinates to picture', () => {
-  //   const input = fixture.nativeElement.querySelector('title');
-  //   const event = createNewEvent('input');
-    
-    
-  //   component.picture = picture;
-  //   const expectedCoordinates = latLng(30, 39);
-    
-  //   component.setCoordinates(expectedCoordinates);
+  [
+    { controlname: 'latitude', invalidValue: 90.0001, inputError: 'max' },
+    { controlname: 'latitude', invalidValue: -90.0001, inputError: 'min' },
+    { controlname: 'longitude', invalidValue: 180.0001, inputError: 'max' },
+    { controlname: 'longitude', invalidValue: -180.0001, inputError: 'min' },
+  ].forEach((coordinateInput) => {
+    it(`should set invalid ${ coordinateInput.inputError } value for ${ coordinateInput.controlname }`, () => {
+      let inputControl = component.pictureForm.get(coordinateInput.controlname);
 
-  //   expect(component.pictureForm.controls['latitude'].value)
-  //     .toBe(expectedCoordinates.lat);
-  //   expect(component.pictureForm.controls['longitude'].value)
-  //     .toBe(expectedCoordinates.lng);
-  // });
+      inputControl?.setValue(coordinateInput.invalidValue);
 
-  // it('should clear picture data on cancel', () => {
-  //   component.pictureForm.controls['title'] = picture;
-
-  //   component.onCancel();
-
-  //   expect(component.picture).toEqual(pristinePicture);
-  // });
+      expect(inputControl?.valid).toBeFalsy();
+      expect(inputControl?.errors![coordinateInput.inputError]).toBeTruthy();
+    });
+  })
 });
