@@ -17,13 +17,15 @@ export class UploadPictureComponent {
 
   file: File | null = null;
 
+  private readonly numberValidator = Validators.pattern(/^-?\d+$/);
+
   pictureForm = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.minLength(4)]),
     description: new FormControl('', [Validators.required]),
     path: new FormControl('', [Validators.required]),
     date: new FormControl(undefined, [Validators.required]),
-    latitude: new FormControl(0, [Validators.required, Validators.pattern(/^-?\d+$/)]),
-    longitude: new FormControl(0, [Validators.required, Validators.pattern(/^-?\d+$/)]),
+    latitude: new FormControl(0, [Validators.required, this.numberValidator]),
+    longitude: new FormControl(0, [Validators.required, this.numberValidator]),
   });
 
   constructor(private http: HttpClient) {}
