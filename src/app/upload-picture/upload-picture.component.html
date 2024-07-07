@@ -1,7 +1,9 @@
 <div class="card">    
     <div class="card-body">
         <h5 class="card-title">Upload New Picture</h5>
-        <form (ngSubmit)="onSubmit()">
+        <form 
+            (ngSubmit)="onSubmit()"
+            [formGroup]="pictureForm">
             <div class="mb-3">
                 <input 
                     class="form-control" 
@@ -10,58 +12,65 @@
                     #inputFile>
             </div>
 
-            <p>
+            <div class="input-row">
                 <label for="title" class="form-label">Title</label>
                 <input 
-                    [(ngModel)]="picture.name" 
                     type="text" 
                     class="form-control" 
+                    [ngClass]="{'is-invalid': isInputValid()}"
                     id="title" 
-                    name="title" />
-            </p>
+                    name="title"
+                    formControlName="title" 
+                    required />
+                    <div 
+                        *ngIf="isInputValid()"
+                        class="text-danger input-message">
+                            Title must be at least 4 characters long
+            </div>
+                </div>
 
-            <p>
+            <div class="input-row">
                 <label for="description" class="form-label">Description</label>
                 <textarea 
-                    [(ngModel)]="picture.description" 
                     class="form-control" 
                     id="description" 
-                    name="description"></textarea>
-            </p>
+                    name="description"
+                    formControlName="description"></textarea>
+            </div>
 
-            <p>
+            <div class="input-row">
                 <label for="date" class="form-label">Date</label>
                 <input 
-                    [(ngModel)]="picture.date" 
                     type="date" 
                     class="form-control" 
                     id="date" 
-                    name="date" />
-            </p>
+                    name="date" 
+                    formControlName="date" />
+            </div>
             
-            <p>
+            <div class="input-row">
                 <label for="latitude" class="form-label">Latitude</label>
                 <input 
-                    [(ngModel)]="picture.latitude" 
                     type="number" 
                     min="-90"
                     max="90"
                     class="form-control" 
                     id="latitude" 
-                    name="latitude" />
-            </p>
-            
-            <p>
+                    name="latitude"
+                    formControlName="latitude" />
+            </div>
+
+            <div>
                 <label for="logitude" class="form-label">Longitude</label>
                 <input 
-                    [(ngModel)]="picture.longitude" 
                     type="number" 
                     min="-180"
                     max="180"
                     class="form-control" 
-                    id="logitude" 
-                    name="logitude" />
-            </p>
+                    id="longitude" 
+                    name="longitude"
+                    formControlName="longitude" />
+            </div>
 
             <p class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <button 
@@ -70,7 +79,8 @@
                     (click)="onCancel()">Cancel</button>
                 <button 
                     type="submit" 
-                    class="btn btn-primary">Upload</button>
+                    class="btn btn-primary"
+                    [disabled]="!pictureForm.valid">Upload</button>
             </p>
         </form>
     </div>

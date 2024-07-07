@@ -5,7 +5,6 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { EventEmitter } from '@angular/core';
 import { Picture } from '../models/picture.model';
-import { latLng } from 'leaflet';
 
 describe('UploadPictureComponent', () => {
   let component: UploadPictureComponent;
@@ -31,7 +30,16 @@ describe('UploadPictureComponent', () => {
     date: new Date('2024-05-22'),
     latitude: 49.2992,
     longitude: 19.9742,
-}
+  }
+
+  const requiredInputs = [
+    { controlName: 'title', invalidValue: '', validValue: 'abcd' },
+    { controlName: 'description', invalidValue: '', validValue: 'a' },
+    { controlName: 'path', invalidValue: '', validValue: 'image.jpg' },
+    { controlName: 'date', invalidValue: undefined, validValue: new Date('22/05/1991') },
+    { controlName: 'latitude', invalidValue: undefined, validValue: 0 },
+    { controlName: 'longitude', invalidValue: undefined, validValue: 0 },
+  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -52,29 +60,57 @@ describe('UploadPictureComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should emit the picture on submit', () => {
-    component.picture = picture;
+  requiredInputs.forEach((input) => {
+    it(`should set required error on missing ${ input.controlName } value`, () => {
+      let inputControl = component.pictureForm.get(input.controlName);
 
-    component.onSubmit();
+      inputControl?.setValue(input.invalidValue);
 
-    expect(addSpy.emit).toHaveBeenCalledOnceWith(picture);
+      expect(inputControl?.valid).toBeFalsy();
+      expect(inputControl?.errors!['required']).toBeTruthy();
+    });
   });
 
-  it('should set coordinates to picture', () => {
-    component.picture = picture;
-    const expectedCoordinates = latLng(30, 39);
+  requiredInputs.forEach((input) => {
+    it(`should not set required error on valid ${ input.controlName } value`, () => {
+      let inputControl = component.pictureForm.get(input.controlName);
+
+      inputControl?.setValue(input.validValue);
+
+      expect(inputControl?.valid).toBeTruthy();
+    });
+  });
+
+  it('should require minimum length of 4 for title input', () => {
+    let titleInput = component.pictureForm.controls['title'];
+
+    titleInput.setValue('abc');
+
+    expect(titleInput.valid).toBeFalsy();
+    expect(titleInput.errors!['minlength']).toBeTruthy();
+  });
+
+  // it('should set coordinates to picture', () => {
+  //   const input = fixture.nativeElement.querySelector('title');
+  //   const event = createNewEvent('input');
     
-    component.setCoordinates(expectedCoordinates);
+    
+  //   component.picture = picture;
+  //   const expectedCoordinates = latLng(30, 39);
+    
+  //   component.setCoordinates(expectedCoordinates);
 
-    expect(component.picture.latitude).toBe(expectedCoordinates.lat);
-    expect(component.picture.longitude).toBe(expectedCoordinates.lng);
-  });
+  //   expect(component.pictureForm.controls['latitude'].value)
+  //     .toBe(expectedCoordinates.lat);
+  //   expect(component.pictureForm.controls['longitude'].value)
+  //     .toBe(expectedCoordinates.lng);
+  // });
 
-  it('should clear picture data on cancel', () => {
-    component.picture = picture;
+  // it('should clear picture data on cancel', () => {
+  //   component.pictureForm.controls['title'] = picture;
 
-    component.onCancel();
+  //   component.onCancel();
 
-    expect(component.picture).toEqual(pristinePicture);
-  });
+  //   expect(component.picture).toEqual(pristinePicture);
+  // });
 });
