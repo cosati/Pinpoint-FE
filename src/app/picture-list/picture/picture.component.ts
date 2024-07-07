@@ -10,13 +10,14 @@ import { DatePipe } from '@angular/common';
   styleUrl: './picture.component.scss'
 })
 export class PictureComponent {
-  @Input() pictureData: Picture | null = null;
+  @Input() pictureData: Picture | undefined = undefined;
 
   datePipe = new DatePipe('en-US');
 
   constructor() {}
 
-  getFormattedDate(date?: Date) {
+  getFormattedDate(date: Date | undefined) {
+    if (date == undefined) date = new Date();
     return this.datePipe.transform(date, 'shortDate');
   }
 }

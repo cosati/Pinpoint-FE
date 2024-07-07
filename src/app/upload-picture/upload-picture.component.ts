@@ -23,7 +23,7 @@ export class UploadPictureComponent {
     title: new FormControl('', [Validators.required, Validators.minLength(4)]),
     description: new FormControl('', [Validators.required]),
     path: new FormControl('', [Validators.required]),
-    date: new FormControl(undefined, [Validators.required]),
+    date: new FormControl<Date | undefined>(undefined, [Validators.required]),
     latitude: new FormControl(0, [Validators.required, this.numberValidator]),
     longitude: new FormControl(0, [Validators.required, this.numberValidator]),
   });

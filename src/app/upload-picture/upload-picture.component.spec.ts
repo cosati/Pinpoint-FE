@@ -5,6 +5,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { EventEmitter } from '@angular/core';
 import { Picture } from '../models/picture.model';
+import { latLng } from 'leaflet';
 
 describe('UploadPictureComponent', () => {
   let component: UploadPictureComponent;
@@ -12,18 +13,8 @@ describe('UploadPictureComponent', () => {
 
   let addSpy: jasmine.SpyObj<EventEmitter<Picture>>;
 
-  const pristinePicture: Picture = {
-    name: "",
-    description: "",
-    id: '',
-    path: '',
-    date: undefined,
-    latitude: 0,
-    longitude: 0
-  }
-
-  const picture: Picture = {
-    id: '4',
+  const validPicture: Picture = {
+    id: '0',
     name: 'Zakopane',
     description: 'Morskie Oko',
     path: 'tatry.jpg',
@@ -105,4 +96,64 @@ describe('UploadPictureComponent', () => {
       expect(inputControl?.errors![coordinateInput.inputError]).toBeTruthy();
     });
   })
+
+  it('should clear inputs on cancel', () => {
+    const pictureForm = insertValuesIntoForm(component, validPicture);
+
+    component.onCancel();
+    
+    expect(pictureForm.controls['title'].value).toBe('');
+    expect(pictureForm.controls['description'].value).toBe('');
+    expect(pictureForm.controls['path'].value).toBe('');
+    expect(pictureForm.controls['latitude'].value).toBe(0);
+    expect(pictureForm.controls['longitude'].value).toBe(0);
+    expect(pictureForm.controls['date'].value).toBe(undefined);
+  });
+
+  it('should emit the picture on submit', () => {
+    insertValuesIntoForm(component, validPicture);
+
+    component.onSubmit();
+
+    expect(addSpy.emit).toHaveBeenCalledOnceWith(validPicture);
+  });
+
+  it('should set coordinates to form', () => {
+    const expectedCoordinates = latLng(30, 39);
+
+    component.setCoordinates(expectedCoordinates);
+
+    expect(component.pictureForm.controls['latitude'].value)
+      .toBe(expectedCoordinates.lat);
+    expect(component.pictureForm.controls['longitude'].value)
+      .toBe(expectedCoordinates.lng);
+  });
+
+  it('should disable upload button if form is invalid', () => {
+    const uploadButton = 
+      fixture.debugElement.nativeElement.querySelector('#upload-button');
+    const invalidPicture: Picture = {
+      ...validPicture,
+      path: ''
+    }
+
+    let pictureForm = insertValuesIntoForm(component, invalidPicture);
+
+    expect(pictureForm.valid).toBeFalsy();
+    expect(uploadButton.disabled).toBeTruthy();
+  });
+
+  // TODO: Add test for enablig upload button.
 });
+
+function insertValuesIntoForm(component: UploadPictureComponent, picture: Picture) {
+  const pictureForm = component.pictureForm;
+  pictureForm.controls['title'].setValue(picture.name);
+  pictureForm.controls['description'].setValue(picture.description);
+  pictureForm.controls['path'].setValue(picture.path);
+  pictureForm.controls['latitude'].setValue(picture.latitude);
+  pictureForm.controls['longitude'].setValue(picture.longitude);
+  pictureForm.controls['date'].setValue(picture.date);
+  return pictureForm;
+}
+
