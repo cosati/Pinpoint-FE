@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { type Picture } from '../models/picture.model';
 import { CommonModule } from '@angular/common';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'app-upload-picture',
@@ -12,12 +13,13 @@ import { CommonModule } from '@angular/common';
   styleUrl: './upload-picture.component.scss'
 })
 export class UploadPictureComponent {
+  @Input() initialCoordinates: L.LatLng = L.latLng(0, 0);
   @Output() add = new EventEmitter<Picture>();
   @ViewChild('inputFile') myInputVariable!: ElementRef;
 
   file: File | null = null;
 
-  private readonly numberValidator = Validators.pattern(/^-?\d+$/);
+  private readonly numberValidator = Validators.pattern(/^-?\d+|$^/);
 
   pictureForm = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.minLength(4)]),
@@ -30,8 +32,13 @@ export class UploadPictureComponent {
 
   constructor(private http: HttpClient) {}
 
-  ngOnInit(): void {}
-
+  ngOnInit(): void {
+    this.pictureForm.controls['latitude']!
+      .setValue(this.initialCoordinates.lat);
+    this.pictureForm.controls['longitude']!
+      .setValue(this.initialCoordinates.lng);
+  }
+  
   onChange(event: any) {
     console.log(event);
     const file: File = event.target.files[0];
@@ -69,8 +76,8 @@ export class UploadPictureComponent {
   }
 
   public setCoordinates(coordinates: L.LatLng) {
-    this.pictureForm.controls['latitude'].setValue(coordinates.lat);
-    this.pictureForm.controls['longitude'].setValue(coordinates.lng);
+    this.pictureForm.controls['latitude']!.setValue(coordinates.lat);
+    this.pictureForm.controls['longitude']!.setValue(coordinates.lng);
   }
 
   isInputValid(): boolean {

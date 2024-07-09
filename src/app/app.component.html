@@ -1,10 +1,17 @@
 <div class="container">
     <div class="row">
-        <div class="container-md p-2 col-md-3">
-            <app-upload-picture (add)="onAddPicture($event)" />
+        <div
+            *ngIf="shouldDisplayUploadDialog" 
+            class="container-md p-2 col-md-3">
+            <app-upload-picture 
+                [initialCoordinates]="clickedCoordinates"
+                (add)="onAddPicture($event)" />
         </div>
         <div class="col-md-9 p-2">
-            <app-map [pictureData]="pictures" (mapClick)="onMapClick($event)" />
+            <app-map 
+                [pictureData]="pictures" 
+                (mapClick)="onMapClick($event)" 
+                (isAddingPicture)="onAddingPicture($event)" />
         </div>
     </div>
 </div>

@@ -5,11 +5,14 @@ import { PictureListComponent } from './picture-list/picture-list.component';
 import { MapComponent } from './map/map.component';
 import { DUMMY_IMAGES } from './dummy-images';
 import { type Picture } from './models/picture.model';
+import { CommonModule } from '@angular/common';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
+    CommonModule,
     RouterOutlet, 
     UploadPictureComponent, 
     PictureListComponent,
@@ -22,6 +25,9 @@ export class AppComponent {
   @ViewChild(UploadPictureComponent) uploadComponent!: UploadPictureComponent;
   pictures: Picture[] = DUMMY_IMAGES;
 
+  shouldDisplayUploadDialog = false;
+  clickedCoordinates = L.latLng(0, 0);
+
   onAddPicture(newPicture: Picture) {
     console.log("Adding new Picture: " + newPicture.name);
     this.pictures.push(newPicture);
@@ -29,6 +35,14 @@ export class AppComponent {
   }
 
   onMapClick(coordinates: L.LatLng) {
-    this.uploadComponent.setCoordinates(coordinates);
+    this.shouldDisplayUploadDialog = true;
+    this.clickedCoordinates = coordinates;
+    if (this.uploadComponent) {
+      this.uploadComponent.setCoordinates(coordinates);
+    }
+  }
+
+  onAddingPicture(isAddingPicture: boolean) {
+    this.shouldDisplayUploadDialog = isAddingPicture;
   }
 }

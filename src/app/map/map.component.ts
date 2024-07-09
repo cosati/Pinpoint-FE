@@ -15,6 +15,7 @@ const MIN_ZOOM = 2;
 export class MapComponent implements AfterViewInit {
   @Input() pictureData: Picture[] = [];
   @Output() mapClick = new EventEmitter<L.LatLng>();
+  @Output() isAddingPicture = new EventEmitter<boolean>();
 
   private map: any;
   private marker: L.Marker | null = null;
@@ -22,7 +23,8 @@ export class MapComponent implements AfterViewInit {
   private initMap(): void {
     this.map = L.map('map', {
       center: [0, 0],
-      zoom: 3
+      zoom: 3,
+      maxBounds: [[-90, -180], [90, 180]]
     })
     .fitBounds(this.getPicturesBounds())
     .on('click', (event) => this.addTemporaryMarker(event))
@@ -40,8 +42,8 @@ export class MapComponent implements AfterViewInit {
   private addTemporaryMarker(event: L.LeafletMouseEvent) {
     console.log("Clicked on", event.latlng);
     this.removeTemporaryMarker();
-    this.mapClick.emit(event.latlng);
     this.insertTemporaryMarkerIntoMap(event);
+    this.mapClick.emit(event.latlng);
   }
 
   private insertTemporaryMarkerIntoMap(event: L.LeafletMouseEvent) {
@@ -59,7 +61,7 @@ export class MapComponent implements AfterViewInit {
     if (this.marker != null) {
       this.marker.removeFrom(this.map);
     }
-    this.mapClick.emit(L.latLng(0, 0));
+    this.isAddingPicture.emit(false);
   }
 
   private plotLocations(): void {
@@ -77,9 +79,12 @@ export class MapComponent implements AfterViewInit {
   }
 
   private getPicturesBounds(): L.LatLngBounds {
-    let maxLatitude = this.pictureData[0] ? this.pictureData[0].latitude : 0;
+    if (this.pictureData.length <= 0) {
+      return L.latLngBounds(L.latLng(80, 150), L.latLng(-80, -150));
+    }
+    let maxLatitude = this.pictureData[0].latitude;
     let minLatitude = maxLatitude;
-    let maxLongitude = this.pictureData[0] ? this.pictureData[0].longitude : 0;
+    let maxLongitude = this.pictureData[0].longitude;
     let minLongitude = maxLongitude;
     for (const picture of this.pictureData) {
       if (picture.latitude > maxLatitude) {
@@ -95,7 +100,9 @@ export class MapComponent implements AfterViewInit {
         minLongitude = picture.longitude;
       }
     }
-    return L.latLngBounds(L.latLng(minLatitude, minLongitude), L.latLng(maxLatitude, maxLongitude));
+    return L.latLngBounds(
+      L.latLng(minLatitude, minLongitude), 
+      L.latLng(maxLatitude, maxLongitude));
   }
 
   ngAfterViewInit() {
