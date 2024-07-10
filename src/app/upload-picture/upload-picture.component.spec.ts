@@ -138,12 +138,22 @@ describe('UploadPictureComponent', () => {
     }
 
     let pictureForm = insertValuesIntoForm(component, invalidPicture);
+    fixture.detectChanges();
 
     expect(pictureForm.valid).toBeFalsy();
     expect(uploadButton.disabled).toBeTruthy();
   });
 
-  // TODO: Add test for enablig upload button.
+  it('should enable upload button if form is valid', () => {
+    const uploadButton = 
+      fixture.debugElement.nativeElement.querySelector('#upload-button');
+    
+    let pictureForm = insertValuesIntoForm(component, validPicture);
+    fixture.detectChanges();
+
+    expect(pictureForm.valid).toBeTruthy();
+    expect(uploadButton.disabled).toBeFalsy();
+  });
 });
 
 function insertValuesIntoForm(component: UploadPictureComponent, picture: Picture) {
@@ -154,6 +164,7 @@ function insertValuesIntoForm(component: UploadPictureComponent, picture: Pictur
   pictureForm.controls['latitude'].setValue(picture.latitude);
   pictureForm.controls['longitude'].setValue(picture.longitude);
   pictureForm.controls['date'].setValue(picture.date);
+  pictureForm.updateValueAndValidity();
   return pictureForm;
 }
 
