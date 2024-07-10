@@ -39,7 +39,7 @@ describe('AppComponent', () => {
     component.uploadComponent = uploadComponentSpy as UploadPictureComponent;
 
     mapComponentSpy = 
-      jasmine.createSpyObj('MapComponent', ['plotNewLocation']);
+      jasmine.createSpyObj('MapComponent', ['plotNewLocation', 'moveTemporaryMarker']);
     component.mapComponent = mapComponentSpy as MapComponent;
   });
 
@@ -61,6 +61,15 @@ describe('AppComponent', () => {
 
     expect(mapComponentSpy.plotNewLocation)
       .toHaveBeenCalledOnceWith(uploadedPicture);
+  });
+
+  it('should update map with new coordinates', () => {
+    const expectedCoordinates = latLng(30, 40);
+
+    component.onInsertNewCoordinate(expectedCoordinates);
+
+    expect(mapComponentSpy.moveTemporaryMarker)
+      .toHaveBeenCalledOnceWith(expectedCoordinates);
   });
 
   it('should add uploaded picture to array.', () => {

@@ -34,6 +34,10 @@ export class AppComponent {
     this.mapComponent.plotNewLocation(newPicture);
   }
 
+  onInsertNewCoordinate(coordinates: L.LatLng) {
+    this.mapComponent.moveTemporaryMarker(coordinates);
+  }
+
   onMapClick(coordinates: L.LatLng) {
     this.shouldDisplayUploadDialog = true;
     this.clickedCoordinates = coordinates;

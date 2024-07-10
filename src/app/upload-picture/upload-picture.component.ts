@@ -15,6 +15,7 @@ import * as L from 'leaflet';
 export class UploadPictureComponent {
   @Input() initialCoordinates: L.LatLng = L.latLng(0, 0);
   @Output() add = new EventEmitter<Picture>();
+  @Output() changedCoordinates = new EventEmitter<L.LatLng>();
   @ViewChild('inputFile') myInputVariable!: ElementRef;
 
   file: File | null = null;
@@ -78,6 +79,16 @@ export class UploadPictureComponent {
   public setCoordinates(coordinates: L.LatLng) {
     this.pictureForm.controls['latitude']!.setValue(coordinates.lat);
     this.pictureForm.controls['longitude']!.setValue(coordinates.lng);
+  }
+
+  onChangeCoordinates() {
+    console.log("Setting coordinates thorugh input to " + L.latLng(
+      this.pictureForm.controls['latitude']!.value!, 
+      this.pictureForm.controls['longitude']!.value!));
+    this.changedCoordinates.emit(
+      L.latLng(
+        this.pictureForm.controls['latitude']!.value!, 
+        this.pictureForm.controls['longitude']!.value!));
   }
 
   isInputValid(): boolean {

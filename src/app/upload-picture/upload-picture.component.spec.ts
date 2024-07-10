@@ -6,12 +6,14 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { EventEmitter } from '@angular/core';
 import { Picture } from '../models/picture.model';
 import { latLng } from 'leaflet';
+import { By } from '@angular/platform-browser';
 
 describe('UploadPictureComponent', () => {
   let component: UploadPictureComponent;
   let fixture: ComponentFixture<UploadPictureComponent>;
 
   let addSpy: jasmine.SpyObj<EventEmitter<Picture>>;
+  let emitCoordinatesSpy: jasmine.SpyObj<EventEmitter<L.LatLng>>;
 
   const validPicture: Picture = {
     id: '0',
@@ -45,6 +47,9 @@ describe('UploadPictureComponent', () => {
 
     addSpy = jasmine.createSpyObj('add', ['emit']);
     component.add = addSpy as EventEmitter<Picture>;
+
+    emitCoordinatesSpy = jasmine.createSpyObj('changedCoordinates', ['emit']);
+    component.changedCoordinates = emitCoordinatesSpy as EventEmitter<L.LatLng>;
   });
 
   it('should create', () => {
@@ -129,6 +134,18 @@ describe('UploadPictureComponent', () => {
       .toBe(expectedCoordinates.lng);
   });
 
+  // TODO: Fix and add for both inputs.
+  xit('should emit new coordinates when changing input values', () => {
+    const coordinateInput = 
+      fixture.debugElement.query(By.css('#latitude-input')).nativeElement;
+
+      coordinateInput.value = 3;
+      coordinateInput.dispatchEvent(new Event('change'));
+      fixture.detectChanges();
+      
+      expect(emitCoordinatesSpy.emit).toHaveBeenCalledOnceWith(latLng(50, 0));
+  });
+
   it('should disable upload button if form is invalid', () => {
     const uploadButton = 
       fixture.debugElement.nativeElement.querySelector('#upload-button');
@@ -164,7 +181,6 @@ function insertValuesIntoForm(component: UploadPictureComponent, picture: Pictur
   pictureForm.controls['latitude'].setValue(picture.latitude);
   pictureForm.controls['longitude'].setValue(picture.longitude);
   pictureForm.controls['date'].setValue(picture.date);
-  pictureForm.updateValueAndValidity();
   return pictureForm;
 }
 
