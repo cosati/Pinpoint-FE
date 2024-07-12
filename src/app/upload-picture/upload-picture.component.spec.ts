@@ -50,7 +50,11 @@ describe('UploadPictureComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [UploadPictureComponent],
-      providers: [provideHttpClient(), provideHttpClientTesting(), {provide: PicturesService, useValue: picturesServiceSpy}],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: PicturesService, useValue: picturesServiceSpy },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(UploadPictureComponent);
@@ -135,7 +139,9 @@ describe('UploadPictureComponent', () => {
 
     uploadButton.click();
 
-    expect(picturesServiceSpy.addPicture).toHaveBeenCalledOnceWith(validPicture);
+    expect(picturesServiceSpy.addPicture).toHaveBeenCalledOnceWith(
+      validPicture
+    );
   });
 
   it('should close the dialog after submit', () => {
