@@ -8,7 +8,6 @@ import { MapComponent } from './map/map.component';
 import { Picture } from './models/picture.model';
 
 describe('AppComponent', () => {
-
   let fixture: ComponentFixture<AppComponent>;
   let component: AppComponent;
   let uploadComponentSpy: jasmine.SpyObj<UploadPictureComponent>;
@@ -23,7 +22,7 @@ describe('AppComponent', () => {
     latitude: 50.0647,
     longitude: 19.9478,
   };
-  
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
@@ -34,16 +33,16 @@ describe('AppComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    uploadComponentSpy = 
-      jasmine.createSpyObj('UploadPictureComponent', ['setCoordinates']);
+    uploadComponentSpy = jasmine.createSpyObj('UploadPictureComponent', [
+      'setCoordinates',
+    ]);
     component.uploadComponent = uploadComponentSpy as UploadPictureComponent;
 
-    mapComponentSpy = 
-      jasmine.createSpyObj(
-        'MapComponent', 
-        ['plotNewLocation', 
-          'moveTemporaryMarker', 
-          'removeTemporaryMarker']);
+    mapComponentSpy = jasmine.createSpyObj('MapComponent', [
+      'plotNewLocation',
+      'moveTemporaryMarker',
+      'removeTemporaryMarker',
+    ]);
     component.mapComponent = mapComponentSpy as MapComponent;
   });
 
@@ -56,15 +55,17 @@ describe('AppComponent', () => {
 
     component.onMapClick(clickedCoordinates);
 
-    expect(uploadComponentSpy.setCoordinates)
-      .toHaveBeenCalledOnceWith(clickedCoordinates);
+    expect(uploadComponentSpy.setCoordinates).toHaveBeenCalledOnceWith(
+      clickedCoordinates
+    );
   });
 
   it('should call mapComponent.plotNewLocation on add new picture', () => {
     component.onAddPicture(uploadedPicture);
 
-    expect(mapComponentSpy.plotNewLocation)
-      .toHaveBeenCalledOnceWith(uploadedPicture);
+    expect(mapComponentSpy.plotNewLocation).toHaveBeenCalledOnceWith(
+      uploadedPicture
+    );
   });
 
   it('should update map with new coordinates', () => {
@@ -72,8 +73,9 @@ describe('AppComponent', () => {
 
     component.onInsertNewCoordinate(expectedCoordinates);
 
-    expect(mapComponentSpy.moveTemporaryMarker)
-      .toHaveBeenCalledOnceWith(expectedCoordinates);
+    expect(mapComponentSpy.moveTemporaryMarker).toHaveBeenCalledOnceWith(
+      expectedCoordinates
+    );
   });
 
   it('should add uploaded picture to array.', () => {
@@ -85,7 +87,6 @@ describe('AppComponent', () => {
   it('should removeTemporaryMarker on MapComponent when onCloseUploadDialog', () => {
     component.onCloseUploadDialog();
 
-    expect(mapComponentSpy.removeTemporaryMarker)
-      .toHaveBeenCalledTimes(1);
+    expect(mapComponentSpy.removeTemporaryMarker).toHaveBeenCalledTimes(1);
   });
 });

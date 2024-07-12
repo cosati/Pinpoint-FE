@@ -13,12 +13,13 @@ import * as L from 'leaflet';
   standalone: true,
   imports: [
     CommonModule,
-    RouterOutlet, 
-    UploadPictureComponent, 
+    RouterOutlet,
+    UploadPictureComponent,
     PictureListComponent,
-    MapComponent],
+    MapComponent,
+  ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   @ViewChild(MapComponent) mapComponent!: MapComponent;
@@ -29,7 +30,7 @@ export class AppComponent {
   clickedCoordinates = L.latLng(0, 0);
 
   onAddPicture(newPicture: Picture) {
-    console.log("Adding new Picture: " + newPicture.name);
+    console.log('Adding new Picture: ' + newPicture.name);
     this.pictures.push(newPicture);
     this.mapComponent.plotNewLocation(newPicture);
   }
@@ -52,5 +53,5 @@ export class AppComponent {
 
   onCloseUploadDialog() {
     this.mapComponent.removeTemporaryMarker();
-  } 
+  }
 }

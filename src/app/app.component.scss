@@ -1,19 +1,19 @@
 app-map {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
 }
 
 app-upload-picture {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 1;
-    box-shadow: 3px 3px 10px;
-    border-radius: 10px;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  box-shadow: 3px 3px 10px;
+  border-radius: 10px;
 }
