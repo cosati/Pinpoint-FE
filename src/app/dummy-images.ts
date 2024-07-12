@@ -44,4 +44,13 @@ export const DUMMY_IMAGES = [
         latitude: -22.9068,
         longitude: -43.1729,
     },
+    {
+        id: '6',
+        name: 'Toronto',
+        description: 'CN Tower',
+        path: 'tower.jpg',
+        date: new Date('2024-05-22'),
+        latitude: 43.6532,
+        longitude: -79.3832,
+    },
 ]

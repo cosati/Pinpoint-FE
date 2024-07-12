@@ -66,7 +66,7 @@ export class MapComponent implements AfterViewInit {
     this.marker?.setLatLng(coordinates);
   }
 
-  private removeTemporaryMarker() {
+  public removeTemporaryMarker() {
     if (this.marker != null) {
       this.marker.removeFrom(this.map);
     }

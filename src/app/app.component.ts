@@ -49,4 +49,8 @@ export class AppComponent {
   onAddingPicture(isAddingPicture: boolean) {
     this.shouldDisplayUploadDialog = isAddingPicture;
   }
+
+  onCloseUploadDialog() {
+    this.mapComponent.removeTemporaryMarker();
+  } 
 }

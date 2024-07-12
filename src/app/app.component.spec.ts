@@ -39,7 +39,11 @@ describe('AppComponent', () => {
     component.uploadComponent = uploadComponentSpy as UploadPictureComponent;
 
     mapComponentSpy = 
-      jasmine.createSpyObj('MapComponent', ['plotNewLocation', 'moveTemporaryMarker']);
+      jasmine.createSpyObj(
+        'MapComponent', 
+        ['plotNewLocation', 
+          'moveTemporaryMarker', 
+          'removeTemporaryMarker']);
     component.mapComponent = mapComponentSpy as MapComponent;
   });
 
@@ -78,4 +82,10 @@ describe('AppComponent', () => {
     expect(component.pictures).toContain(uploadedPicture);
   });
 
+  it('should removeTemporaryMarker on MapComponent when onCloseUploadDialog', () => {
+    component.onCloseUploadDialog();
+
+    expect(mapComponentSpy.removeTemporaryMarker)
+      .toHaveBeenCalledTimes(1);
+  });
 });

@@ -14,6 +14,7 @@ describe('UploadPictureComponent', () => {
 
   let addSpy: jasmine.SpyObj<EventEmitter<Picture>>;
   let emitCoordinatesSpy: jasmine.SpyObj<EventEmitter<L.LatLng>>;
+  let emitCloseDialogSpy: jasmine.SpyObj<EventEmitter<any>>;
 
   const validPicture: Picture = {
     id: '0',
@@ -50,6 +51,9 @@ describe('UploadPictureComponent', () => {
 
     emitCoordinatesSpy = jasmine.createSpyObj('changedCoordinates', ['emit']);
     component.changedCoordinates = emitCoordinatesSpy as EventEmitter<L.LatLng>;
+
+    emitCloseDialogSpy = jasmine.createSpyObj('closeDialog', ['emit']);
+    component.closeDialog = emitCloseDialogSpy as EventEmitter<any>;
   });
 
   it('should create', () => {
@@ -170,6 +174,15 @@ describe('UploadPictureComponent', () => {
 
     expect(pictureForm.valid).toBeTruthy();
     expect(uploadButton.disabled).toBeFalsy();
+  });
+
+  it('should emit closeDialog if user clicks on cancel button', () => {
+    const cancelButton = 
+      fixture.debugElement.nativeElement.querySelector('#cancel-button');
+
+    cancelButton.click();
+
+    expect(emitCloseDialogSpy.emit).toHaveBeenCalledTimes(1);
   });
 });
 

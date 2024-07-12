@@ -16,6 +16,7 @@ export class UploadPictureComponent {
   @Input() initialCoordinates: L.LatLng = L.latLng(0, 0);
   @Output() add = new EventEmitter<Picture>();
   @Output() changedCoordinates = new EventEmitter<L.LatLng>();
+  @Output() closeDialog = new EventEmitter<any>();
   @ViewChild('inputFile') myInputVariable!: ElementRef;
 
   file: File | null = null;
@@ -73,6 +74,7 @@ export class UploadPictureComponent {
     this.pictureForm.controls['date'].setValue(undefined);
     this.pictureForm.controls['latitude'].setValue(0);
     this.pictureForm.controls['longitude'].setValue(0);
+    this.closeDialog.emit();
     // TODO: remove temporary marker.
   }
 

@@ -6,7 +6,8 @@
             <app-upload-picture 
                 [initialCoordinates]="clickedCoordinates"
                 (add)="onAddPicture($event)"
-                (changedCoordinates)="onInsertNewCoordinate($event)" />
+                (changedCoordinates)="onInsertNewCoordinate($event)"
+                (closeDialog)="onCloseUploadDialog()" />
         </div>
         <div class="col-md-9 p-2">
             <app-map 
