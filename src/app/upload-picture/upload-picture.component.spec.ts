@@ -24,13 +24,17 @@ describe('UploadPictureComponent', () => {
     date: new Date('2024-05-22'),
     latitude: 49.2992,
     longitude: 19.9742,
-  }
+  };
 
   const requiredInputs = [
     { controlName: 'title', invalidValue: '', validValue: 'abcd' },
     { controlName: 'description', invalidValue: '', validValue: 'a' },
     { controlName: 'path', invalidValue: '', validValue: 'image.jpg' },
-    { controlName: 'date', invalidValue: undefined, validValue: new Date('22/05/1991') },
+    {
+      controlName: 'date',
+      invalidValue: undefined,
+      validValue: new Date('22/05/1991'),
+    },
     { controlName: 'latitude', invalidValue: undefined, validValue: 0 },
     { controlName: 'longitude', invalidValue: undefined, validValue: 0 },
   ];
@@ -39,8 +43,7 @@ describe('UploadPictureComponent', () => {
     await TestBed.configureTestingModule({
       imports: [UploadPictureComponent],
       providers: [provideHttpClient(), provideHttpClientTesting()],
-    })
-    .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(UploadPictureComponent);
     component = fixture.componentInstance;
@@ -61,7 +64,7 @@ describe('UploadPictureComponent', () => {
   });
 
   requiredInputs.forEach((input) => {
-    it(`should set required error on missing ${ input.controlName } value`, () => {
+    it(`should set required error on missing ${input.controlName} value`, () => {
       let inputControl = component.pictureForm.get(input.controlName);
 
       inputControl?.setValue(input.invalidValue);
@@ -72,7 +75,7 @@ describe('UploadPictureComponent', () => {
   });
 
   requiredInputs.forEach((input) => {
-    it(`should not set required error on valid ${ input.controlName } value`, () => {
+    it(`should not set required error on valid ${input.controlName} value`, () => {
       let inputControl = component.pictureForm.get(input.controlName);
 
       inputControl?.setValue(input.validValue);
@@ -96,7 +99,7 @@ describe('UploadPictureComponent', () => {
     { controlname: 'longitude', invalidValue: 180.0001, inputError: 'max' },
     { controlname: 'longitude', invalidValue: -180.0001, inputError: 'min' },
   ].forEach((coordinateInput) => {
-    it(`should set invalid ${ coordinateInput.inputError } value for ${ coordinateInput.controlname }`, () => {
+    it(`should set invalid ${coordinateInput.inputError} value for ${coordinateInput.controlname}`, () => {
       let inputControl = component.pictureForm.get(coordinateInput.controlname);
 
       inputControl?.setValue(coordinateInput.invalidValue);
@@ -104,13 +107,13 @@ describe('UploadPictureComponent', () => {
       expect(inputControl?.valid).toBeFalsy();
       expect(inputControl?.errors![coordinateInput.inputError]).toBeTruthy();
     });
-  })
+  });
 
   it('should clear inputs on cancel', () => {
     const pictureForm = insertValuesIntoForm(component, validPicture);
 
     component.onCancel();
-    
+
     expect(pictureForm.controls['title'].value).toBe('');
     expect(pictureForm.controls['description'].value).toBe('');
     expect(pictureForm.controls['path'].value).toBe('');
@@ -132,31 +135,34 @@ describe('UploadPictureComponent', () => {
 
     component.setCoordinates(expectedCoordinates);
 
-    expect(component.pictureForm.controls['latitude'].value)
-      .toBe(expectedCoordinates.lat);
-    expect(component.pictureForm.controls['longitude'].value)
-      .toBe(expectedCoordinates.lng);
+    expect(component.pictureForm.controls['latitude'].value).toBe(
+      expectedCoordinates.lat
+    );
+    expect(component.pictureForm.controls['longitude'].value).toBe(
+      expectedCoordinates.lng
+    );
   });
 
   // TODO: Fix and add for both inputs.
   xit('should emit new coordinates when changing input values', () => {
-    const coordinateInput = 
-      fixture.debugElement.query(By.css('#latitude-input')).nativeElement;
+    const coordinateInput = fixture.debugElement.query(
+      By.css('#latitude-input')
+    ).nativeElement;
 
-      coordinateInput.value = 3;
-      coordinateInput.dispatchEvent(new Event('change'));
-      fixture.detectChanges();
-      
-      expect(emitCoordinatesSpy.emit).toHaveBeenCalledOnceWith(latLng(50, 0));
+    coordinateInput.value = 3;
+    coordinateInput.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+
+    expect(emitCoordinatesSpy.emit).toHaveBeenCalledOnceWith(latLng(50, 0));
   });
 
   it('should disable upload button if form is invalid', () => {
-    const uploadButton = 
+    const uploadButton =
       fixture.debugElement.nativeElement.querySelector('#upload-button');
     const invalidPicture: Picture = {
       ...validPicture,
-      path: ''
-    }
+      path: '',
+    };
 
     let pictureForm = insertValuesIntoForm(component, invalidPicture);
     fixture.detectChanges();
@@ -166,9 +172,9 @@ describe('UploadPictureComponent', () => {
   });
 
   it('should enable upload button if form is valid', () => {
-    const uploadButton = 
+    const uploadButton =
       fixture.debugElement.nativeElement.querySelector('#upload-button');
-    
+
     let pictureForm = insertValuesIntoForm(component, validPicture);
     fixture.detectChanges();
 
@@ -177,7 +183,7 @@ describe('UploadPictureComponent', () => {
   });
 
   it('should emit closeDialog if user clicks on cancel button', () => {
-    const cancelButton = 
+    const cancelButton =
       fixture.debugElement.nativeElement.querySelector('#cancel-button');
 
     cancelButton.click();
@@ -186,7 +192,10 @@ describe('UploadPictureComponent', () => {
   });
 });
 
-function insertValuesIntoForm(component: UploadPictureComponent, picture: Picture) {
+function insertValuesIntoForm(
+  component: UploadPictureComponent,
+  picture: Picture
+) {
   const pictureForm = component.pictureForm;
   pictureForm.controls['title'].setValue(picture.name);
   pictureForm.controls['description'].setValue(picture.description);
@@ -196,4 +205,3 @@ function insertValuesIntoForm(component: UploadPictureComponent, picture: Pictur
   pictureForm.controls['date'].setValue(picture.date);
   return pictureForm;
 }
-
