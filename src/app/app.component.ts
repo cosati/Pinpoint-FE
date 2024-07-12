@@ -24,14 +24,12 @@ import * as L from 'leaflet';
 export class AppComponent {
   @ViewChild(MapComponent) mapComponent!: MapComponent;
   @ViewChild(UploadPictureComponent) uploadComponent!: UploadPictureComponent;
-  pictures: Picture[] = DUMMY_IMAGES;
 
   shouldDisplayUploadDialog = false;
   clickedCoordinates = L.latLng(0, 0);
 
   onAddPicture(newPicture: Picture) {
     console.log('Adding new Picture: ' + newPicture.name);
-    this.pictures.push(newPicture);
     this.mapComponent.plotNewLocation(newPicture);
   }
 

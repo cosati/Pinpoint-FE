@@ -2,11 +2,13 @@ import {
   AfterViewInit,
   Component,
   EventEmitter,
+  inject,
   Input,
   Output,
 } from '@angular/core';
 import * as L from 'leaflet';
 import { Picture } from '../models/picture.model';
+import { PicturesService } from '../services/pictures.service';
 
 const MAX_ZOOM = 18;
 const MIN_ZOOM = 2;
@@ -19,9 +21,10 @@ const MIN_ZOOM = 2;
   styleUrl: './map.component.scss',
 })
 export class MapComponent implements AfterViewInit {
-  @Input() pictureData: Picture[] = [];
   @Output() mapClick = new EventEmitter<L.LatLng>();
   @Output() isAddingPicture = new EventEmitter<boolean>();
+
+  private picturesService = inject(PicturesService);
 
   private map: any;
   private marker: L.Marker | null = null;
@@ -87,7 +90,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   private plotLocations(): void {
-    for (const picture of this.pictureData) {
+    for (const picture of this.picturesService.allPictures()) {
       this.plotNewLocation(picture);
     }
   }
@@ -104,14 +107,15 @@ export class MapComponent implements AfterViewInit {
   }
 
   private getPicturesBounds(): L.LatLngBounds {
-    if (this.pictureData.length <= 0) {
+    let picturesList: Picture[] = this.picturesService.allPictures();
+    if (picturesList.length <= 0) {
       return L.latLngBounds(L.latLng(80, 150), L.latLng(-80, -150));
     }
-    let maxLatitude = this.pictureData[0].latitude;
+    let maxLatitude = picturesList[0].latitude;
     let minLatitude = maxLatitude;
-    let maxLongitude = this.pictureData[0].longitude;
+    let maxLongitude = picturesList[0].longitude;
     let minLongitude = maxLongitude;
-    for (const picture of this.pictureData) {
+    for (const picture of picturesList) {
       if (picture.latitude > maxLatitude) {
         maxLatitude = picture.latitude;
       }

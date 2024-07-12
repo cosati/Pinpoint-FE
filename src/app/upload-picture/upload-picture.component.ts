@@ -17,6 +17,7 @@ import {
 import { type Picture } from '../models/picture.model';
 import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';
+import { PicturesService } from '../services/pictures.service';
 
 @Component({
   selector: 'app-upload-picture',
@@ -45,7 +46,10 @@ export class UploadPictureComponent {
     longitude: new FormControl(0, [Validators.required, this.numberValidator]),
   });
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private picturesService: PicturesService
+  ) {}
 
   ngOnInit(): void {
     this.pictureForm.controls['latitude']!.setValue(
@@ -69,7 +73,6 @@ export class UploadPictureComponent {
 
   onSubmit() {
     const picture: Picture = {
-      id: '0',
       name: this.pictureForm.controls['title'].value!,
       description: this.pictureForm.controls['description'].value!,
       path: this.pictureForm.controls['path'].value!,
@@ -77,20 +80,13 @@ export class UploadPictureComponent {
       latitude: this.pictureForm.controls['latitude'].value!,
       longitude: this.pictureForm.controls['longitude'].value!,
     };
+    this.picturesService.addPicture(picture);
+    this.closeDialog.emit();
     this.add.emit(picture);
   }
 
   onCancel() {
-    console.log('Clearing up form.');
-    this.file = null;
-    this.pictureForm.controls['title'].setValue('');
-    this.pictureForm.controls['description'].setValue('');
-    this.pictureForm.controls['path'].setValue('');
-    this.pictureForm.controls['date'].setValue(undefined);
-    this.pictureForm.controls['latitude'].setValue(0);
-    this.pictureForm.controls['longitude'].setValue(0);
     this.closeDialog.emit();
-    // TODO: remove temporary marker.
   }
 
   public setCoordinates(coordinates: L.LatLng) {

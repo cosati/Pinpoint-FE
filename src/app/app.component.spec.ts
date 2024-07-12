@@ -14,7 +14,6 @@ describe('AppComponent', () => {
   let mapComponentSpy: jasmine.SpyObj<MapComponent>;
 
   const uploadedPicture: Picture = {
-    id: '2',
     name: 'Krakow',
     description: 'Wawel Castle',
     path: 'wawel.jpg',
@@ -76,12 +75,6 @@ describe('AppComponent', () => {
     expect(mapComponentSpy.moveTemporaryMarker).toHaveBeenCalledOnceWith(
       expectedCoordinates
     );
-  });
-
-  it('should add uploaded picture to array.', () => {
-    component.onAddPicture(uploadedPicture);
-
-    expect(component.pictures).toContain(uploadedPicture);
   });
 
   it('should removeTemporaryMarker on MapComponent when onCloseUploadDialog', () => {

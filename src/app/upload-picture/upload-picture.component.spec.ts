@@ -7,6 +7,7 @@ import { EventEmitter } from '@angular/core';
 import { Picture } from '../models/picture.model';
 import { latLng } from 'leaflet';
 import { By } from '@angular/platform-browser';
+import { PicturesService } from '../services/pictures.service';
 
 describe('UploadPictureComponent', () => {
   let component: UploadPictureComponent;
@@ -16,8 +17,11 @@ describe('UploadPictureComponent', () => {
   let emitCoordinatesSpy: jasmine.SpyObj<EventEmitter<L.LatLng>>;
   let emitCloseDialogSpy: jasmine.SpyObj<EventEmitter<any>>;
 
+  let picturesServiceSpy: jasmine.SpyObj<PicturesService>;
+
+  let uploadButton: any;
+
   const validPicture: Picture = {
-    id: '0',
     name: 'Zakopane',
     description: 'Morskie Oko',
     path: 'tatry.jpg',
@@ -40,14 +44,21 @@ describe('UploadPictureComponent', () => {
   ];
 
   beforeEach(async () => {
+    picturesServiceSpy = jasmine.createSpyObj('PicturesService', [
+      'addPicture',
+    ]);
+
     await TestBed.configureTestingModule({
       imports: [UploadPictureComponent],
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [provideHttpClient(), provideHttpClientTesting(), {provide: PicturesService, useValue: picturesServiceSpy}],
     }).compileComponents();
 
     fixture = TestBed.createComponent(UploadPictureComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+
+    uploadButton =
+      fixture.debugElement.nativeElement.querySelector('#upload-button');
 
     addSpy = jasmine.createSpyObj('add', ['emit']);
     component.add = addSpy as EventEmitter<Picture>;
@@ -109,25 +120,31 @@ describe('UploadPictureComponent', () => {
     });
   });
 
-  it('should clear inputs on cancel', () => {
-    const pictureForm = insertValuesIntoForm(component, validPicture);
-
-    component.onCancel();
-
-    expect(pictureForm.controls['title'].value).toBe('');
-    expect(pictureForm.controls['description'].value).toBe('');
-    expect(pictureForm.controls['path'].value).toBe('');
-    expect(pictureForm.controls['latitude'].value).toBe(0);
-    expect(pictureForm.controls['longitude'].value).toBe(0);
-    expect(pictureForm.controls['date'].value).toBe(undefined);
-  });
-
   it('should emit the picture on submit', () => {
     insertValuesIntoForm(component, validPicture);
+    fixture.detectChanges();
 
-    component.onSubmit();
+    uploadButton.click();
 
     expect(addSpy.emit).toHaveBeenCalledOnceWith(validPicture);
+  });
+
+  it('should call addPicture on service on submit', () => {
+    insertValuesIntoForm(component, validPicture);
+    fixture.detectChanges();
+
+    uploadButton.click();
+
+    expect(picturesServiceSpy.addPicture).toHaveBeenCalledOnceWith(validPicture);
+  });
+
+  it('should close the dialog after submit', () => {
+    insertValuesIntoForm(component, validPicture);
+    fixture.detectChanges();
+
+    uploadButton.click();
+
+    expect(emitCloseDialogSpy.emit).toHaveBeenCalledTimes(1);
   });
 
   it('should set coordinates to form', () => {
@@ -157,8 +174,6 @@ describe('UploadPictureComponent', () => {
   });
 
   it('should disable upload button if form is invalid', () => {
-    const uploadButton =
-      fixture.debugElement.nativeElement.querySelector('#upload-button');
     const invalidPicture: Picture = {
       ...validPicture,
       path: '',
@@ -172,9 +187,6 @@ describe('UploadPictureComponent', () => {
   });
 
   it('should enable upload button if form is valid', () => {
-    const uploadButton =
-      fixture.debugElement.nativeElement.querySelector('#upload-button');
-
     let pictureForm = insertValuesIntoForm(component, validPicture);
     fixture.detectChanges();
 
