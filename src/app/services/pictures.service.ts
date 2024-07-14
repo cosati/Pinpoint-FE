@@ -39,7 +39,7 @@ export class PicturesService {
         picture,
         this.httpOptions
       )
-      .pipe(catchError(this.handleError('sendData', picture)));
+      .pipe(catchError(this.handleError('sendPicture', picture)));
   }
 
   addPicture(pictureData: Picture) {

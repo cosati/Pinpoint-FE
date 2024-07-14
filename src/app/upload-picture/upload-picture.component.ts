@@ -81,9 +81,14 @@ export class UploadPictureComponent {
       latitude: this.pictureForm.controls['latitude'].value!,
       longitude: this.pictureForm.controls['longitude'].value!,
     };
-    this.picturesService.addPicture(picture);
-    this.closeDialog.emit();
-    this.add.emit(picture);
+    this.picturesService.sendPicture(picture).subscribe({
+      next: () => {
+        this.closeDialog.emit();
+        this.add.emit(picture);
+      },
+      error: (error) => console.log(error),
+      complete: () => console.log('Picture added.'),
+    });
   }
 
   onCancel() {
