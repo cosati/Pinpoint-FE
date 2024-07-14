@@ -19,7 +19,7 @@ const MIN_ZOOM = 2;
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss',
 })
-export class MapComponent implements AfterViewInit, OnInit {
+export class MapComponent implements OnInit {
   @Output() mapClick = new EventEmitter<L.LatLng>();
   @Output() isAddingPicture = new EventEmitter<boolean>();
 
@@ -141,14 +141,11 @@ export class MapComponent implements AfterViewInit, OnInit {
     this.picturesService.getPictures().subscribe({
       next: (pictures) => {
         this.pictures = pictures;
+        this.initMap();
         this.plotLocations();
       },
       error: (error) => console.log(error),
       complete: () => console.log('Fetched pictures from server.'),
     });
-  }
-
-  ngAfterViewInit() {
-    this.initMap();
   }
 }
