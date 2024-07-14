@@ -3,7 +3,6 @@ import { RouterOutlet } from '@angular/router';
 import { UploadPictureComponent } from './upload-picture/upload-picture.component';
 import { PictureListComponent } from './picture-list/picture-list.component';
 import { MapComponent } from './map/map.component';
-import { DUMMY_IMAGES } from './dummy-images';
 import { type Picture } from './models/picture.model';
 import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';

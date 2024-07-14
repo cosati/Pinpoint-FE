@@ -73,10 +73,11 @@ export class UploadPictureComponent {
 
   onSubmit() {
     const picture: Picture = {
+      id: null,
       name: this.pictureForm.controls['title'].value!,
       description: this.pictureForm.controls['description'].value!,
-      path: this.pictureForm.controls['path'].value!,
-      date: this.pictureForm.controls['date'].value!,
+      imagePath: this.pictureForm.controls['path'].value!,
+      dateTaken: this.pictureForm.controls['date'].value!,
       latitude: this.pictureForm.controls['latitude'].value!,
       longitude: this.pictureForm.controls['longitude'].value!,
     };

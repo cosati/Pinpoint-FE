@@ -2,8 +2,7 @@ import {
   AfterViewInit,
   Component,
   EventEmitter,
-  inject,
-  Input,
+  OnInit,
   Output,
 } from '@angular/core';
 import * as L from 'leaflet';
@@ -20,14 +19,17 @@ const MIN_ZOOM = 2;
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss',
 })
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements AfterViewInit, OnInit {
   @Output() mapClick = new EventEmitter<L.LatLng>();
   @Output() isAddingPicture = new EventEmitter<boolean>();
 
-  private picturesService = inject(PicturesService);
+  pictures: Picture[] = [];
+  error: string | null = null;
 
   private map: any;
   private marker: L.Marker | null = null;
+
+  constructor(private picturesService: PicturesService) {}
 
   private initMap(): void {
     this.map = L.map('map', {
@@ -90,7 +92,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   private plotLocations(): void {
-    for (const picture of this.picturesService.allPictures()) {
+    for (const picture of this.pictures) {
       this.plotNewLocation(picture);
     }
   }
@@ -100,14 +102,14 @@ export class MapComponent implements AfterViewInit {
       .bindTooltip(picture.description)
       .bindPopup(
         "<img src='assets/pictures/" +
-          picture.path +
+          picture.imagePath +
           "' width='50' height='50' />"
       )
       .addTo(this.map);
   }
 
   private getPicturesBounds(): L.LatLngBounds {
-    let picturesList: Picture[] = this.picturesService.allPictures();
+    let picturesList: Picture[] = this.pictures;
     if (picturesList.length <= 0) {
       return L.latLngBounds(L.latLng(80, 150), L.latLng(-80, -150));
     }
@@ -135,8 +137,18 @@ export class MapComponent implements AfterViewInit {
     );
   }
 
+  ngOnInit() {
+    this.picturesService.getPictures().subscribe({
+      next: (pictures) => {
+        this.pictures = pictures;
+        this.plotLocations();
+      },
+      error: (error) => console.log(error),
+      complete: () => console.log('Fetched pictures from server.'),
+    });
+  }
+
   ngAfterViewInit() {
     this.initMap();
-    this.plotLocations();
   }
 }

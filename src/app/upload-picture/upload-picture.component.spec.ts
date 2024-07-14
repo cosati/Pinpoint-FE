@@ -22,10 +22,11 @@ describe('UploadPictureComponent', () => {
   let uploadButton: any;
 
   const validPicture: Picture = {
+    id: null,
     name: 'Zakopane',
     description: 'Morskie Oko',
-    path: 'tatry.jpg',
-    date: new Date('2024-05-22'),
+    imagePath: 'tatry.jpg',
+    dateTaken: new Date('2024-05-22'),
     latitude: 49.2992,
     longitude: 19.9742,
   };
@@ -182,7 +183,7 @@ describe('UploadPictureComponent', () => {
   it('should disable upload button if form is invalid', () => {
     const invalidPicture: Picture = {
       ...validPicture,
-      path: '',
+      imagePath: '',
     };
 
     let pictureForm = insertValuesIntoForm(component, invalidPicture);
@@ -217,9 +218,9 @@ function insertValuesIntoForm(
   const pictureForm = component.pictureForm;
   pictureForm.controls['title'].setValue(picture.name);
   pictureForm.controls['description'].setValue(picture.description);
-  pictureForm.controls['path'].setValue(picture.path);
+  pictureForm.controls['path'].setValue(picture.imagePath);
   pictureForm.controls['latitude'].setValue(picture.latitude);
   pictureForm.controls['longitude'].setValue(picture.longitude);
-  pictureForm.controls['date'].setValue(picture.date);
+  pictureForm.controls['date'].setValue(picture.dateTaken);
   return pictureForm;
 }
