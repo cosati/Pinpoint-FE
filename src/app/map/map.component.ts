@@ -32,18 +32,34 @@ export class MapComponent implements OnInit {
   constructor(private picturesService: PicturesService) {}
 
   private initMap(): void {
+    // TODO: Center initially on user's location if no pictures.
+    let mapCenter = L.latLng(30, 0);
+    let zoom = 3;
+
+    if (this.pictures.length == 1) {
+      mapCenter = L.latLng(
+        this.pictures[0].latitude,
+        this.pictures[0].longitude
+      );
+      zoom = MAX_ZOOM / 2;
+    }
+
     this.map = L.map('map', {
-      center: [0, 0],
-      zoom: 3,
+      center: mapCenter,
+      zoom: zoom,
+      // TODO: Allow inifinite lateral movement.
       maxBounds: [
         [-90, -180],
         [90, 180],
       ],
       zoomControl: false,
     })
-      .fitBounds(this.getPicturesBounds())
       .on('click', (event) => this.addTemporaryMarker(event))
       .on('contextmenu', () => this.removeTemporaryMarker());
+
+    if (this.pictures.length > 1) {
+      this.map.fitBounds(this.getPicturesBounds());
+    }
 
     L.control
       .zoom({
@@ -110,7 +126,7 @@ export class MapComponent implements OnInit {
 
   private getPicturesBounds(): L.LatLngBounds {
     let picturesList: Picture[] = this.pictures;
-    if (picturesList.length <= 0) {
+    if (picturesList.length <= 1) {
       return L.latLngBounds(L.latLng(80, 150), L.latLng(-80, -150));
     }
     let maxLatitude = picturesList[0].latitude;
