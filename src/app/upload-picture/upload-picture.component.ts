@@ -34,13 +34,14 @@ export class UploadPictureComponent {
   @ViewChild('inputFile') myInputVariable!: ElementRef;
 
   file: File | null = null;
+  uploadedImageData = null;
 
   private readonly numberValidator = Validators.pattern(/^-?\d+|$^/);
 
   pictureForm = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.minLength(4)]),
     description: new FormControl('', [Validators.required]),
-    path: new FormControl('', [Validators.required]),
+    imageData: new FormControl('', [Validators.required]),
     date: new FormControl<Date | undefined>(undefined, [Validators.required]),
     latitude: new FormControl(0, [Validators.required, this.numberValidator]),
     longitude: new FormControl(0, [Validators.required, this.numberValidator]),
@@ -63,11 +64,15 @@ export class UploadPictureComponent {
   onChange(event: any) {
     console.log(event);
     const file: File = event.target.files[0];
-
+    const reader = new FileReader();
     if (file) {
       this.file = file;
       this.pictureForm.controls['title'].setValue(file.name);
-      this.pictureForm.controls['path'].setValue(file.name);
+      reader.readAsDataURL(file);
+      reader.onload = (e: any) => {
+        this.uploadedImageData = e.target.result;
+        this.pictureForm.controls['imageData'].setValue(this.uploadedImageData);
+      };
     }
   }
 
@@ -76,7 +81,7 @@ export class UploadPictureComponent {
       id: null,
       name: this.pictureForm.controls['title'].value!,
       description: this.pictureForm.controls['description'].value!,
-      imagePath: this.pictureForm.controls['path'].value!,
+      imageData: this.pictureForm.controls['imageData'].value!,
       dateTaken: this.pictureForm.controls['date'].value!,
       latitude: this.pictureForm.controls['latitude'].value!,
       longitude: this.pictureForm.controls['longitude'].value!,

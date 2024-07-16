@@ -87,6 +87,7 @@ export class MapComponent implements OnInit {
     this.mapClick.emit(event.latlng);
   }
 
+  // TODO: Do not insert temporary marker if Popup is open.
   private insertTemporaryMarkerIntoMap(event: L.LeafletMouseEvent) {
     this.marker = new L.Marker(event.latlng, { draggable: true })
       .on('drag', (event) => {
@@ -117,8 +118,8 @@ export class MapComponent implements OnInit {
     L.marker([picture.latitude, picture.longitude])
       .bindTooltip(picture.description)
       .bindPopup(
-        "<img src='assets/pictures/" +
-          picture.imagePath +
+        "<img src='" +
+          picture.imageData +
           "' width='50' height='50' />"
       )
       .addTo(this.map);

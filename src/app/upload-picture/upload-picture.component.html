@@ -1,6 +1,14 @@
 <div class="card">
   <div class="card-body">
     <h5 class="card-title">Upload New Picture</h5>
+    <div class="image-container row justify-content-md-center">
+      <img
+        [src]="uploadedImageData"
+        *ngIf="uploadedImageData"
+        height="200px"
+        class="uploaded-image"
+      />
+    </div>
     <form (ngSubmit)="onSubmit()" [formGroup]="pictureForm">
       <div class="mb-3">
         <input
