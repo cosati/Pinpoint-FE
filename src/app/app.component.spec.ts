@@ -60,6 +60,12 @@ describe('AppComponent', () => {
     );
   });
 
+  it('should set shouldDisplayUploadDialog to true', () => {
+    component.onMapClick(latLng(0, 0));
+    
+    expect(component.shouldDisplayUploadDialog).toBeTrue();
+  })
+
   it('should call mapComponent.plotNewLocation on add new picture', () => {
     component.onAddPicture(uploadedPicture);
 
