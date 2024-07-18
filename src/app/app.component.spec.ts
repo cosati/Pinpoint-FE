@@ -3,7 +3,7 @@ import { AppComponent } from './app.component';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { UploadPictureComponent } from './upload-picture/upload-picture.component';
-import { LatLng, latLng } from 'leaflet';
+import { latLng } from 'leaflet';
 import { MapComponent } from './map/map.component';
 import { Picture } from './models/picture.model';
 
@@ -14,10 +14,11 @@ describe('AppComponent', () => {
   let mapComponentSpy: jasmine.SpyObj<MapComponent>;
 
   const uploadedPicture: Picture = {
+    id: null,
     name: 'Krakow',
     description: 'Wawel Castle',
-    path: 'wawel.jpg',
-    date: new Date('2023-07-20'),
+    imageData: 'wawel.jpg',
+    dateTaken: new Date('2023-07-20'),
     latitude: 50.0647,
     longitude: 19.9478,
   };

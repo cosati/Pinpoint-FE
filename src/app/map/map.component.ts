@@ -118,9 +118,7 @@ export class MapComponent implements OnInit {
     L.marker([picture.latitude, picture.longitude])
       .bindTooltip(picture.description)
       .bindPopup(
-        "<img src='" +
-          picture.imageData +
-          "' width='50' height='50' />"
+        "<img src='" + picture.imageData + "' width='50' height='50' />"
       )
       .addTo(this.map);
   }
