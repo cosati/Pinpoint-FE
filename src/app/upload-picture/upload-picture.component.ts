@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import {
   Component,
   ElementRef,
@@ -47,10 +46,7 @@ export class UploadPictureComponent {
     longitude: new FormControl(0, [Validators.required, this.numberValidator]),
   });
 
-  constructor(
-    private http: HttpClient,
-    private picturesService: PicturesService
-  ) {}
+  constructor(private picturesService: PicturesService) {}
 
   ngOnInit(): void {
     this.pictureForm.controls['latitude']!.setValue(
@@ -87,7 +83,8 @@ export class UploadPictureComponent {
       longitude: this.pictureForm.controls['longitude'].value!,
     };
     this.picturesService.sendPicture(picture).subscribe({
-      next: () => {
+      next: (response) => {
+        console.log(response);
         this.closeDialog.emit();
         this.add.emit(picture);
       },

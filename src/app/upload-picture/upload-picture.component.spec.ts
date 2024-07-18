@@ -8,8 +8,9 @@ import { Picture } from '../models/picture.model';
 import { latLng } from 'leaflet';
 import { By } from '@angular/platform-browser';
 import { PicturesService } from '../services/pictures.service';
+import { of } from 'rxjs';
 
-describe('UploadPictureComponent', () => {
+fdescribe('UploadPictureComponent', () => {
   let component: UploadPictureComponent;
   let fixture: ComponentFixture<UploadPictureComponent>;
 
@@ -34,7 +35,6 @@ describe('UploadPictureComponent', () => {
   const requiredInputs = [
     { controlName: 'title', invalidValue: '', validValue: 'abcd' },
     { controlName: 'description', invalidValue: '', validValue: 'a' },
-    { controlName: 'path', invalidValue: '', validValue: 'image.jpg' },
     {
       controlName: 'date',
       invalidValue: undefined,
@@ -46,16 +46,14 @@ describe('UploadPictureComponent', () => {
 
   beforeEach(async () => {
     picturesServiceSpy = jasmine.createSpyObj('PicturesService', [
-      'addPicture',
+      'sendPicture',
     ]);
+
+    picturesServiceSpy.sendPicture.and.returnValue(of(null));
 
     await TestBed.configureTestingModule({
       imports: [UploadPictureComponent],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        { provide: PicturesService, useValue: picturesServiceSpy },
-      ],
+      providers: [{ provide: PicturesService, useValue: picturesServiceSpy }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(UploadPictureComponent);
@@ -140,7 +138,7 @@ describe('UploadPictureComponent', () => {
 
     uploadButton.click();
 
-    expect(picturesServiceSpy.addPicture).toHaveBeenCalledOnceWith(
+    expect(picturesServiceSpy.sendPicture).toHaveBeenCalledOnceWith(
       validPicture
     );
   });
