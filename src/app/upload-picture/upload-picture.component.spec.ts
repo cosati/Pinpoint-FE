@@ -1,8 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UploadPictureComponent } from './upload-picture.component';
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { EventEmitter } from '@angular/core';
 import { Picture } from '../models/picture.model';
 import { latLng } from 'leaflet';
@@ -10,7 +8,7 @@ import { By } from '@angular/platform-browser';
 import { PicturesService } from '../services/pictures.service';
 import { of } from 'rxjs';
 
-fdescribe('UploadPictureComponent', () => {
+describe('UploadPictureComponent', () => {
   let component: UploadPictureComponent;
   let fixture: ComponentFixture<UploadPictureComponent>;
 
