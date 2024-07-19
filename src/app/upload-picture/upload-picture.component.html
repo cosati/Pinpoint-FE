@@ -12,9 +12,13 @@
     <form (ngSubmit)="onSubmit()" [formGroup]="pictureForm">
       <div class="mb-3">
         <input
+          [ngClass]="{
+            'is-invalid': isInputInvalid(pictureForm.controls['imageData'])
+          }"
           class="form-control"
           type="file"
           id="formFile"
+          formControlName="imageData"
           (change)="onChange($event)"
           #inputFile
         />
@@ -25,13 +29,18 @@
         <input
           type="text"
           class="form-control"
-          [ngClass]="{ 'is-invalid': isInputValid() }"
+          [ngClass]="{
+            'is-invalid': isInputInvalid(pictureForm.controls['title'])
+          }"
           id="title"
           name="title"
           formControlName="title"
           required
         />
-        <div *ngIf="isInputValid()" class="text-danger input-message">
+        <div
+          *ngIf="isInputInvalid(pictureForm.controls['title'])"
+          class="text-danger input-message"
+        >
           Title must be at least 4 characters long
         </div>
       </div>
@@ -40,6 +49,9 @@
         <label for="description" class="form-label">Description</label>
         <textarea
           class="form-control"
+          [ngClass]="{
+            'is-invalid': isInputInvalid(pictureForm.controls['description'])
+          }"
           id="description"
           name="description"
           formControlName="description"
@@ -51,6 +63,10 @@
         <input
           type="date"
           class="form-control"
+          [ngClass]="{
+            'is-invalid': isInputInvalid(pictureForm.controls['date'])
+          }"
+          [max]="today"
           id="date"
           name="date"
           formControlName="date"
@@ -65,6 +81,9 @@
           min="-90"
           max="90"
           class="form-control"
+          [ngClass]="{
+            'is-invalid': isInputInvalid(pictureForm.controls['latitude'])
+          }"
           id="latitude-input"
           name="latitude"
           formControlName="latitude"
@@ -79,6 +98,9 @@
           min="-180"
           max="180"
           class="form-control"
+          [ngClass]="{
+            'is-invalid': isInputInvalid(pictureForm.controls['longitude'])
+          }"
           id="longitude-input"
           name="longitude"
           formControlName="longitude"

@@ -11,6 +11,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { type Picture } from '../models/picture.model';
@@ -35,6 +36,8 @@ export class UploadPictureComponent {
   file: File | null = null;
   uploadedImageData = null;
 
+  today = new Date().toJSON().split('T')[0];
+
   private readonly numberValidator = Validators.pattern(/^-?\d+|$^/);
 
   pictureForm = new FormGroup({
@@ -42,8 +45,16 @@ export class UploadPictureComponent {
     description: new FormControl('', [Validators.required]),
     imageData: new FormControl('', [Validators.required]),
     date: new FormControl<Date | undefined>(undefined, [Validators.required]),
-    latitude: new FormControl(0, [Validators.required, this.numberValidator]),
-    longitude: new FormControl(0, [Validators.required, this.numberValidator]),
+    latitude: new FormControl(0, [
+      Validators.required,
+      this.numberValidator,
+      this.coordinateRangeValidator(-90, 90),
+    ]),
+    longitude: new FormControl(0, [
+      Validators.required,
+      this.numberValidator,
+      this.coordinateRangeValidator(-180, 180),
+    ]),
   });
 
   constructor(private picturesService: PicturesService) {}
@@ -118,11 +129,16 @@ export class UploadPictureComponent {
     );
   }
 
-  isInputValid(): boolean {
-    return (
-      this.pictureForm.controls['title'].invalid &&
-      (this.pictureForm.controls['title'].dirty ||
-        this.pictureForm.controls['title'].touched)
-    );
+  isInputInvalid<T extends FormControl>(control: T): boolean {
+    return control.invalid && (control.dirty || control.touched);
+  }
+
+  coordinateRangeValidator(min: number, max: number) {
+    return (control: FormControl): ValidationErrors | null => {
+      if (control.value && (control.value < min || control.value > max)) {
+        return { range: `Coordinate must be between ${min} and ${max}` };
+      }
+      return null;
+    };
   }
 }
