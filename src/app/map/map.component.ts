@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import * as L from 'leaflet';
 import { Picture } from '../models/picture.model';
 import { PicturesService } from '../services/pictures.service';
