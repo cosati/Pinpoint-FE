@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { UploadPictureComponent } from './upload-picture/upload-picture.component';
-import { PictureListComponent } from './picture-list/picture-list.component';
 import { MapComponent } from './map/map.component';
 import { type Picture } from './models/picture.model';
 import { CommonModule } from '@angular/common';
@@ -10,13 +9,7 @@ import * as L from 'leaflet';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    UploadPictureComponent,
-    PictureListComponent,
-    MapComponent,
-  ],
+  imports: [CommonModule, RouterOutlet, UploadPictureComponent, MapComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

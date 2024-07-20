@@ -110,7 +110,7 @@ export class MapComponent implements OnInit {
 
   public plotNewLocation(picture: Picture): void {
     L.marker([picture.latitude, picture.longitude])
-      .bindTooltip(picture.description)
+      .bindTooltip(picture.name)
       .bindPopup(
         "<img src='" + picture.imageData + "' width='50' height='50' />"
       )
