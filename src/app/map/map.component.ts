@@ -129,7 +129,9 @@ export class MapComponent implements OnInit {
         id: pictureId,
       },
     });
-    dialogRef.componentInstance.onDeletePicture.subscribe((picture) => this.onPictureDeleted(picture));
+    dialogRef.componentInstance.onDeletePicture.subscribe((picture) =>
+      this.onPictureDeleted(picture)
+    );
   }
 
   onPictureDeleted(deletedPicture: Picture) {

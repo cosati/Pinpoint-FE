@@ -72,7 +72,7 @@ export class UploadPictureComponent {
     console.log(event);
     const file: File = event.target.files[0];
     const reader = new FileReader();
-    if (file) {
+    if (file && file.type.startsWith('image/')) {
       this.file = file;
       this.pictureForm.controls['title'].setValue(file.name);
       reader.readAsDataURL(file);
