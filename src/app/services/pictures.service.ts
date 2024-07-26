@@ -63,4 +63,11 @@ export class PicturesService {
       return throwError(() => new Error(error));
     };
   }
+
+  deletePicture(id: number): Observable<any> {
+    return this.httpClient.delete<Picture>(
+      this.baseUrl + 'picture/' + id,
+      this.httpOptions
+    );
+  }
 }

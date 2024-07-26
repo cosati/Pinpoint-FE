@@ -23,7 +23,8 @@ export class MapComponent implements OnInit {
   error: string | null = null;
 
   private map: any;
-  private marker: L.Marker | null = null;
+  private markers = new Map<number, L.Marker>();
+  private temporaryMarker: L.Marker | null = null;
 
   private postDialog = inject(MatDialog);
 
@@ -87,7 +88,7 @@ export class MapComponent implements OnInit {
 
   // TODO: Do not insert temporary marker if Popup is open.
   private insertTemporaryMarkerIntoMap(event: L.LeafletMouseEvent) {
-    this.marker = new L.Marker(event.latlng, { draggable: true })
+    this.temporaryMarker = new L.Marker(event.latlng, { draggable: true })
       .on('drag', (event) => {
         console.log('Dragging to', event.target.getLatLng());
         this.mapClick.emit(event.target.getLatLng());
@@ -96,12 +97,12 @@ export class MapComponent implements OnInit {
   }
 
   public moveTemporaryMarker(coordinates: L.LatLng) {
-    this.marker?.setLatLng(coordinates);
+    this.temporaryMarker?.setLatLng(coordinates);
   }
 
   public removeTemporaryMarker() {
-    if (this.marker != null) {
-      this.marker.removeFrom(this.map);
+    if (this.temporaryMarker != null) {
+      this.temporaryMarker.removeFrom(this.map);
     }
     this.isAddingPicture.emit(false);
   }
@@ -113,12 +114,13 @@ export class MapComponent implements OnInit {
   }
 
   public plotNewLocation(picture: Picture): void {
-    L.marker([picture.latitude, picture.longitude])
+    let marker = L.marker([picture.latitude, picture.longitude])
       .bindTooltip(picture.name)
       .on('click', () => {
         this.openPostDialog(picture.id);
       })
       .addTo(this.map);
+    this.markers.set(picture.id!, marker);
   }
 
   openPostDialog(pictureId: number | null): void {
@@ -127,6 +129,12 @@ export class MapComponent implements OnInit {
         id: pictureId,
       },
     });
+    dialogRef.componentInstance.onDeletePicture.subscribe((picture) => this.onPictureDeleted(picture));
+  }
+
+  onPictureDeleted(deletedPicture: Picture) {
+    let deletedMarker = this.markers.get(deletedPicture.id!);
+    this.map.removeLayer(deletedMarker);
   }
 
   private getPicturesBounds(): L.LatLngBounds {

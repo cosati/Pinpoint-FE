@@ -4,6 +4,20 @@
     <mat-card-header>
       <mat-card-title>{{ picture!.name }}</mat-card-title>
       <mat-card-subtitle>{{ picture!.dateTaken }}</mat-card-subtitle>
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+        aria-label="Options"
+        class="options-menu"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="onDelete()">
+          <mat-icon>delete</mat-icon>
+          <span>Delete Post</span>
+        </button>
+      </mat-menu>
     </mat-card-header>
     <img
       mat-card-image
