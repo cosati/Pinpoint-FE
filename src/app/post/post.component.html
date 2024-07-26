@@ -1,0 +1,20 @@
+<mat-card appearance="outlined">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <div *ngIf="!isLoading">
+    <mat-card-header>
+      <mat-card-title>{{ picture!.name }}</mat-card-title>
+      <mat-card-subtitle>{{ picture!.dateTaken }}</mat-card-subtitle>
+    </mat-card-header>
+    <img
+      mat-card-image
+      src="{{ picture?.imageData }}"
+      alt="{{ picture?.name }}"
+      class="post-image"
+    />
+    <mat-card-content>
+      <p>
+        {{ picture!.description }}
+      </p>
+    </mat-card-content>
+  </div>
+</mat-card>

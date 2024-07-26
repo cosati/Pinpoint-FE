@@ -34,7 +34,7 @@ export class PicturesService {
 
   getPicture(id: number): Observable<Picture | null> {
     return this.httpClient
-      .get<Picture>(this.baseUrl + '/picture/' + id, this.httpOptions)
+      .get<Picture>(this.baseUrl + 'picture/' + id, this.httpOptions)
       .pipe(
         tap((picture) =>
           console.log('Fetched picture from backend: ', picture)

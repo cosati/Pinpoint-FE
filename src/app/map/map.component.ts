@@ -1,7 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import * as L from 'leaflet';
 import { Picture } from '../models/picture.model';
 import { PicturesService } from '../services/pictures.service';
+import { MatDialog } from '@angular/material/dialog';
+import { PostComponent } from '../post/post.component';
 
 const MAX_ZOOM = 18;
 const MIN_ZOOM = 2;
@@ -22,6 +24,8 @@ export class MapComponent implements OnInit {
 
   private map: any;
   private marker: L.Marker | null = null;
+
+  private postDialog = inject(MatDialog);
 
   constructor(private picturesService: PicturesService) {}
 
@@ -111,10 +115,18 @@ export class MapComponent implements OnInit {
   public plotNewLocation(picture: Picture): void {
     L.marker([picture.latitude, picture.longitude])
       .bindTooltip(picture.name)
-      .bindPopup(
-        "<img src='" + picture.imageData + "' width='50' height='50' />"
-      )
+      .on('click', () => {
+        this.openPostDialog(picture.id);
+      })
       .addTo(this.map);
+  }
+
+  openPostDialog(pictureId: number | null): void {
+    const dialogRef = this.postDialog.open(PostComponent, {
+      data: {
+        id: pictureId,
+      },
+    });
   }
 
   private getPicturesBounds(): L.LatLngBounds {
