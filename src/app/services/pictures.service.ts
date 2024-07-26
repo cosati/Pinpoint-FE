@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { Picture } from '../models/picture.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, Observable, tap, throwError, timeout } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +10,7 @@ export class PicturesService {
   private pictures = signal<Picture[]>([]);
   allPictures = this.pictures.asReadonly();
 
-  private readonly baseUrl = 'http://localhost:8080/pictures';
+  private readonly baseUrl = 'http://localhost:8080/';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -19,26 +19,36 @@ export class PicturesService {
   constructor(private httpClient: HttpClient) {}
 
   getPictures(): Observable<Picture[]> {
-    console.log('service called');
-    return this.httpClient.get<Picture[]>(this.baseUrl, this.httpOptions).pipe(
-      timeout(5000),
-      tap((pictures) =>
-        console.log('Fetched pictures from backend: ', pictures)
-      ),
-      catchError((error) => {
-        console.error('Error fetching pictures: ', error);
-        throw error;
-      })
-    );
+    return this.httpClient
+      .get<Picture[]>(this.baseUrl + 'pictures', this.httpOptions)
+      .pipe(
+        tap((pictures) =>
+          console.log('Fetched pictures from backend: ', pictures)
+        ),
+        catchError((error) => {
+          console.error('Error fetching pictures: ', error);
+          throw error;
+        })
+      );
+  }
+
+  getPicture(id: number): Observable<Picture | null> {
+    return this.httpClient
+      .get<Picture>(this.baseUrl + '/picture/' + id, this.httpOptions)
+      .pipe(
+        tap((picture) =>
+          console.log('Fetched picture from backend: ', picture)
+        ),
+        catchError((error) => {
+          console.error('Error fetching pictures: ', error);
+          throw error;
+        })
+      );
   }
 
   sendPicture(picture: Picture) {
     return this.httpClient
-      .post<Picture>(
-        'http://localhost:8080/addPicture',
-        picture,
-        this.httpOptions
-      )
+      .post<Picture>(this.baseUrl + 'addPicture', picture, this.httpOptions)
       .pipe(catchError(this.handleError('sendPicture', picture)));
   }
 
