@@ -109,7 +109,7 @@ export class UploadPictureComponent {
       next: (response) => {
         console.log(response);
         this.closeDialog.emit();
-        this.add.emit(picture);
+        this.add.emit(response);
       },
       error: (error) => console.log(error),
       complete: () => console.log('Picture added.'),

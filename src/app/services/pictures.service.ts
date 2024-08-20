@@ -46,7 +46,7 @@ export class PicturesService {
       );
   }
 
-  sendPicture(picture: Picture) {
+  sendPicture(picture: Picture): Observable<Picture> {
     return this.httpClient
       .post<Picture>(this.baseUrl + 'addPicture', picture, this.httpOptions)
       .pipe(catchError(this.handleError('sendPicture', picture)));
