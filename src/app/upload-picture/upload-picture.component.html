@@ -1,130 +1,137 @@
-<div class="card">
-  <div class="card-body">
-    <h5 class="card-title">Upload New Picture</h5>
-    <div class="image-container row justify-content-md-center">
-      <img
-        [src]="uploadedImageData"
-        *ngIf="uploadedImageData"
-        height="200px"
-        class="uploaded-image"
-      />
-    </div>
-    <form (ngSubmit)="onSubmit()" [formGroup]="pictureForm">
-      <div class="mb-3">
-        <input
-          [ngClass]="{
-            'is-invalid': isInputInvalid(pictureForm.controls['imageData'])
-          }"
-          class="form-control"
-          type="file"
-          accept="image/*"
-          id="formFile"
-          (change)="onChange($event)"
-          #inputFile
-        />
-      </div>
-
-      <div class="input-row">
-        <label for="title" class="form-label">Title</label>
-        <input
-          type="text"
-          class="form-control"
-          [ngClass]="{
-            'is-invalid': isInputInvalid(pictureForm.controls['title'])
-          }"
-          id="title"
-          name="title"
-          formControlName="title"
-          required
-        />
-        <div
-          *ngIf="isInputInvalid(pictureForm.controls['title'])"
-          class="text-danger input-message"
-        >
-          Title must be at least 4 characters long
+<div class="card container">
+  <div class="card-body row">
+    <div class="col">
+      <h5 class="card-title">Upload New Picture</h5>
+      <form (ngSubmit)="onSubmit()" [formGroup]="pictureForm">
+        <div class="mb-3">
+          <input
+            [ngClass]="{
+              'is-invalid': isInputInvalid(pictureForm.controls['imageData'])
+            }"
+            class="form-control"
+            type="file"
+            accept="image/*"
+            id="formFile"
+            (change)="onChange($event)"
+            #inputFile
+          />
         </div>
-      </div>
 
-      <div class="input-row">
-        <label for="description" class="form-label">Description</label>
-        <textarea
-          class="form-control"
-          [ngClass]="{
-            'is-invalid': isInputInvalid(pictureForm.controls['description'])
-          }"
-          id="description"
-          name="description"
-          formControlName="description"
-        ></textarea>
-      </div>
+        <div class="input-row">
+          <label for="title" class="form-label">Title</label>
+          <input
+            type="text"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': isInputInvalid(pictureForm.controls['title'])
+            }"
+            id="title"
+            name="title"
+            formControlName="title"
+            required
+          />
+          <div
+            *ngIf="isInputInvalid(pictureForm.controls['title'])"
+            class="text-danger input-message"
+          >
+            Title must be at least 4 characters long
+          </div>
+        </div>
 
-      <div class="input-row">
-        <label for="date" class="form-label">Date</label>
-        <input
-          type="date"
-          class="form-control"
-          [ngClass]="{
-            'is-invalid': isInputInvalid(pictureForm.controls['date'])
-          }"
-          [max]="today"
-          id="date"
-          name="date"
-          formControlName="date"
-        />
-      </div>
+        <div class="input-row">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': isInputInvalid(pictureForm.controls['description'])
+            }"
+            id="description"
+            name="description"
+            formControlName="description"
+          ></textarea>
+        </div>
 
-      <div class="input-row">
-        <label for="latitude" class="form-label">Latitude</label>
-        <input
-          (change)="onChangeCoordinates()"
-          type="number"
-          min="-90"
-          max="90"
-          class="form-control"
-          [ngClass]="{
-            'is-invalid': isInputInvalid(pictureForm.controls['latitude'])
-          }"
-          id="latitude-input"
-          name="latitude"
-          formControlName="latitude"
-        />
-      </div>
+        <div class="input-row">
+          <label for="date" class="form-label">Date</label>
+          <input
+            type="date"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': isInputInvalid(pictureForm.controls['date'])
+            }"
+            [max]="today"
+            id="date"
+            name="date"
+            formControlName="date"
+          />
+        </div>
 
-      <div class="input-row">
-        <label for="logitude" class="form-label">Longitude</label>
-        <input
-          (change)="onChangeCoordinates()"
-          type="number"
-          min="-180"
-          max="180"
-          class="form-control"
-          [ngClass]="{
-            'is-invalid': isInputInvalid(pictureForm.controls['longitude'])
-          }"
-          id="longitude-input"
-          name="longitude"
-          formControlName="longitude"
-        />
-      </div>
+        <div class="input-row">
+          <label for="latitude" class="form-label">Latitude</label>
+          <input
+            (change)="onChangeCoordinates()"
+            type="number"
+            min="-90"
+            max="90"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': isInputInvalid(pictureForm.controls['latitude'])
+            }"
+            id="latitude-input"
+            name="latitude"
+            formControlName="latitude"
+          />
+        </div>
 
-      <p class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <button
-          id="cancel-button"
-          type="button"
-          class="btn btn-outline-primary"
-          (click)="onCancel()"
-        >
-          Cancel
-        </button>
-        <button
-          id="upload-button"
-          type="submit"
-          class="btn btn-primary"
-          [disabled]="!pictureForm.valid"
-        >
-          Upload
-        </button>
-      </p>
-    </form>
+        <div class="input-row">
+          <label for="logitude" class="form-label">Longitude</label>
+          <input
+            (change)="onChangeCoordinates()"
+            type="number"
+            min="-180"
+            max="180"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': isInputInvalid(pictureForm.controls['longitude'])
+            }"
+            id="longitude-input"
+            name="longitude"
+            formControlName="longitude"
+          />
+        </div>
+
+        <p class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button
+            id="cancel-button"
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="onCancel()"
+          >
+            Cancel
+          </button>
+          <button
+            id="upload-button"
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="!pictureForm.valid"
+          >
+            Upload
+          </button>
+        </p>
+      </form>
+    </div>
+    <div class="col" *ngIf="imageChangedEvent">
+      <image-cropper
+        [aspectRatio]="1"
+        output="base64"
+        [imageChangedEvent]="imageChangedEvent"
+        [resizeToWidth]="1080"
+        [resizeToHeight]="1080"
+        (imageCropped)="imageCropped($event)"
+        (imageLoaded)="imageLoaded($event)"
+        (cropperReady)="cropperReady()"
+        (loadImageFailed)="loadImageFailed()"
+      ></image-cropper>
+    </div>
   </div>
 </div>

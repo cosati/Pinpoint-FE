@@ -18,11 +18,17 @@ import { type Picture } from '../models/picture.model';
 import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';
 import { PicturesService } from '../services/pictures.service';
+import { ImageCropperComponent, ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-upload-picture',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ImageCropperComponent,
+  ],
   templateUrl: './upload-picture.component.html',
   styleUrl: './upload-picture.component.scss',
 })
@@ -33,8 +39,8 @@ export class UploadPictureComponent {
   @Output() closeDialog = new EventEmitter<any>();
   @ViewChild('inputFile') myInputVariable!: ElementRef;
 
-  file: File | null = null;
-  uploadedImageData = null;
+  croppedImage: any = '';
+  imageChangedEvent: Event | null = null;
 
   today = new Date().toJSON().split('T')[0];
 
@@ -68,19 +74,25 @@ export class UploadPictureComponent {
     );
   }
 
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImage = event.base64;
+    this.pictureForm.controls['imageData'].setValue(this.croppedImage);
+  }
+
+  cropperReady() {}
+
+  imageLoaded(image: LoadedImage) {
+    // show cropper
+  }
+
+  loadImageFailed() {
+    // TODO: Display error on UI.
+    console.log('Error uploading image!');
+  }
+
   onChange(event: any) {
     console.log(event);
-    const file: File = event.target.files[0];
-    const reader = new FileReader();
-    if (file && file.type.startsWith('image/')) {
-      this.file = file;
-      this.pictureForm.controls['title'].setValue(file.name);
-      reader.readAsDataURL(file);
-      reader.onload = (e: any) => {
-        this.uploadedImageData = e.target.result;
-        this.pictureForm.controls['imageData'].setValue(this.uploadedImageData);
-      };
-    }
+    this.imageChangedEvent = event;
   }
 
   onSubmit() {
