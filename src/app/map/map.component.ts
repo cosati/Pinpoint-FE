@@ -136,7 +136,7 @@ export class MapComponent implements OnInit {
     let marker = L.marker([picture.latitude, picture.longitude], {
       icon: markerIcon,
     })
-      .bindTooltip(picture.name)
+      .bindTooltip(picture.name, { offset: [16, -16] })
       .on('click', () => {
         this.openPostDialog(picture.id);
       })
