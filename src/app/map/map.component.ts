@@ -88,7 +88,18 @@ export class MapComponent implements OnInit {
 
   // TODO: Do not insert temporary marker if Popup is open.
   private insertTemporaryMarkerIntoMap(event: L.LeafletMouseEvent) {
-    this.temporaryMarker = new L.Marker(event.latlng, { draggable: true })
+    var markerIcon = L.icon({
+      iconUrl: 'assets/icons/marker-opaque.png',
+
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      shadowAnchor: [4, 62],
+    });
+
+    this.temporaryMarker = new L.Marker(event.latlng, {
+      draggable: true,
+      icon: markerIcon,
+    })
       .on('drag', (event) => {
         console.log('Dragging to', event.target.getLatLng());
         this.mapClick.emit(event.target.getLatLng());
@@ -114,7 +125,17 @@ export class MapComponent implements OnInit {
   }
 
   public plotNewLocation(picture: Picture): void {
-    let marker = L.marker([picture.latitude, picture.longitude])
+    var markerIcon = L.icon({
+      iconUrl: 'assets/icons/marker.png',
+
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      shadowAnchor: [4, 62],
+    });
+
+    let marker = L.marker([picture.latitude, picture.longitude], {
+      icon: markerIcon,
+    })
       .bindTooltip(picture.name)
       .on('click', () => {
         this.openPostDialog(picture.id);
