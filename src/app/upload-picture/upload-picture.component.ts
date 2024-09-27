@@ -19,6 +19,7 @@ import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';
 import { PicturesService } from '../services/pictures.service';
 import { ImageCropperComponent, ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import { Geolocation } from '../models/geolocation.model';
 
 @Component({
   selector: 'app-upload-picture',
@@ -96,14 +97,18 @@ export class UploadPictureComponent {
   }
 
   onSubmit() {
+    const geolocation: Geolocation = {
+      id: null,
+      latitude: this.pictureForm.controls['latitude'].value!,
+      longitude: this.pictureForm.controls['longitude'].value!,
+    }
     const picture: Picture = {
       id: null,
       name: this.pictureForm.controls['title'].value!,
       description: this.pictureForm.controls['description'].value!,
       imageData: this.pictureForm.controls['imageData'].value!,
       dateTaken: this.pictureForm.controls['date'].value!,
-      latitude: this.pictureForm.controls['latitude'].value!,
-      longitude: this.pictureForm.controls['longitude'].value!,
+      geolocation: geolocation,
     };
     this.picturesService.sendPicture(picture).subscribe({
       next: (response) => {

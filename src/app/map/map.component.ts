@@ -37,8 +37,8 @@ export class MapComponent implements OnInit {
 
     if (this.pictures.length == 1) {
       mapCenter = L.latLng(
-        this.pictures[0].latitude,
-        this.pictures[0].longitude
+        this.pictures[0].geolocation.latitude,
+        this.pictures[0].geolocation.longitude
       );
       zoom = MAX_ZOOM / 2;
     }
@@ -133,9 +133,12 @@ export class MapComponent implements OnInit {
       shadowAnchor: [4, 62],
     });
 
-    let marker = L.marker([picture.latitude, picture.longitude], {
-      icon: markerIcon,
-    })
+    let marker = L.marker(
+      [picture.geolocation.latitude, picture.geolocation.longitude],
+      {
+        icon: markerIcon,
+      }
+    )
       .bindTooltip(picture.name, { offset: [16, -16] })
       .on('click', () => {
         this.openPostDialog(picture.id);
@@ -165,22 +168,22 @@ export class MapComponent implements OnInit {
     if (picturesList.length <= 1) {
       return L.latLngBounds(L.latLng(80, 150), L.latLng(-80, -150));
     }
-    let maxLatitude = picturesList[0].latitude;
+    let maxLatitude = picturesList[0].geolocation.latitude;
     let minLatitude = maxLatitude;
-    let maxLongitude = picturesList[0].longitude;
+    let maxLongitude = picturesList[0].geolocation.longitude;
     let minLongitude = maxLongitude;
     for (const picture of picturesList) {
-      if (picture.latitude > maxLatitude) {
-        maxLatitude = picture.latitude;
+      if (picture.geolocation.latitude > maxLatitude) {
+        maxLatitude = picture.geolocation.latitude;
       }
-      if (picture.latitude < minLatitude) {
-        minLatitude = picture.latitude;
+      if (picture.geolocation.latitude < minLatitude) {
+        minLatitude = picture.geolocation.latitude;
       }
-      if (picture.longitude > maxLongitude) {
-        maxLongitude = picture.longitude;
+      if (picture.geolocation.longitude > maxLongitude) {
+        maxLongitude = picture.geolocation.longitude;
       }
-      if (picture.longitude < minLongitude) {
-        minLongitude = picture.longitude;
+      if (picture.geolocation.longitude < minLongitude) {
+        minLongitude = picture.geolocation.longitude;
       }
     }
     return L.latLngBounds(
