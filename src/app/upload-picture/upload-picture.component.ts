@@ -104,7 +104,7 @@ export class UploadPictureComponent {
     }
     const picture: Picture = {
       id: null,
-      name: this.pictureForm.controls['title'].value!,
+      title: this.pictureForm.controls['title'].value!,
       description: this.pictureForm.controls['description'].value!,
       imageData: this.pictureForm.controls['imageData'].value!,
       dateTaken: this.pictureForm.controls['date'].value!,

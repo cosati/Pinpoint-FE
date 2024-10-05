@@ -15,7 +15,7 @@ describe('AppComponent', () => {
 
   const uploadedPicture: Picture = {
     id: null,
-    name: 'Krakow',
+    title: 'Krakow',
     description: 'Wawel Castle',
     imageData: 'wawel.jpg',
     dateTaken: new Date('2023-07-20'),

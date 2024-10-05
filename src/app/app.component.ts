@@ -21,7 +21,7 @@ export class AppComponent {
   clickedCoordinates = L.latLng(0, 0);
 
   onAddPicture(newPicture: Picture) {
-    console.log('Adding new Picture: ' + newPicture.name);
+    console.log('Adding new Picture: ' + newPicture.title);
     this.mapComponent.plotNewLocation(newPicture);
   }
 

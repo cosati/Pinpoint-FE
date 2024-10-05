@@ -2,7 +2,7 @@
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <div *ngIf="!isLoading">
     <mat-card-header>
-      <mat-card-title>{{ picture!.name }}</mat-card-title>
+      <mat-card-title>{{ picture!.title }}</mat-card-title>
       <mat-card-subtitle>{{ picture!.dateTaken }}</mat-card-subtitle>
       <button
         mat-icon-button
@@ -22,7 +22,7 @@
     <img
       mat-card-image
       src="{{ picture?.imageData }}"
-      alt="{{ picture?.name }}"
+      alt="{{ picture?.title }}"
       class="post-image"
     />
     <mat-card-content>

@@ -139,7 +139,7 @@ export class MapComponent implements OnInit {
         icon: markerIcon,
       }
     )
-      .bindTooltip(picture.name, { offset: [16, -16] })
+      .bindTooltip(picture.title, { offset: [16, -16] })
       .on('click', () => {
         this.openPostDialog(picture.id);
       })

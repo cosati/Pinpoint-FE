@@ -49,7 +49,7 @@ export class PostComponent {
     this.pictureService.deletePicture(this.picture?.id!).subscribe({
       next: () => {
         this.onDeletePicture.emit(this.picture!);
-        console.log('Post ' + this.picture?.name + ' deleted');
+        console.log('Post ' + this.picture?.title + ' deleted');
       },
       error: (error) => console.log(error),
       complete: () => this.dialogRef.close(),

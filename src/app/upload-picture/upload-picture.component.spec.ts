@@ -22,7 +22,7 @@ describe('UploadPictureComponent', () => {
 
   const validPicture: Picture = {
     id: null,
-    name: 'Zakopane',
+    title: 'Zakopane',
     description: 'Morskie Oko',
     imageData: 'tatry.jpg',
     dateTaken: new Date('2024-05-22'),
@@ -212,7 +212,7 @@ function insertValuesIntoForm(
   picture: Picture
 ) {
   const pictureForm = component.pictureForm;
-  pictureForm.controls['title'].setValue(picture.name);
+  pictureForm.controls['title'].setValue(picture.title);
   pictureForm.controls['description'].setValue(picture.description);
   pictureForm.controls['imageData'].setValue(picture.imageData);
   pictureForm.controls['latitude'].setValue(picture.latitude);
