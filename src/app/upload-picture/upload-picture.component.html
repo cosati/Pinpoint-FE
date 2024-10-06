@@ -5,9 +5,6 @@
       <form (ngSubmit)="onSubmit()" [formGroup]="pictureForm">
         <div class="mb-3">
           <input
-            [ngClass]="{
-              'is-invalid': isInputInvalid(pictureForm.controls['imageData'])
-            }"
             class="form-control"
             type="file"
             accept="image/*"
@@ -123,7 +120,6 @@
     <div class="col" *ngIf="imageChangedEvent">
       <image-cropper
         [aspectRatio]="1"
-        output="base64"
         [imageChangedEvent]="imageChangedEvent"
         [resizeToWidth]="1080"
         [resizeToHeight]="1080"

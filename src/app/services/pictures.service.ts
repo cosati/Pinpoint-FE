@@ -46,9 +46,13 @@ export class PicturesService {
       );
   }
 
-  sendPicture(picture: Picture): Observable<Picture> {
+  sendPicture(picture: Picture, file: File): Observable<Picture> {
+    const formData = new FormData();
+    formData.append('picture', JSON.stringify(picture));
+    formData.append('file', file, 'image.png');
     return this.httpClient
-      .post<Picture>(this.baseUrl + 'addPicture', picture, this.httpOptions)
+      .post<Picture>(this.baseUrl + 'addPicture', formData, {
+        headers: { 'enctype': 'multipart/form-data' }})
       .pipe(catchError(this.handleError('sendPicture', picture)));
   }
 

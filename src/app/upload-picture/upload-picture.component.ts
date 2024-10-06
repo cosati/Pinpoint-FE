@@ -18,7 +18,11 @@ import { type Picture } from '../models/picture.model';
 import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';
 import { PicturesService } from '../services/pictures.service';
-import { ImageCropperComponent, ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import {
+  ImageCropperComponent,
+  ImageCroppedEvent,
+  LoadedImage,
+} from 'ngx-image-cropper';
 import { Geolocation } from '../models/geolocation.model';
 
 @Component({
@@ -50,7 +54,6 @@ export class UploadPictureComponent {
   pictureForm = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.minLength(4)]),
     description: new FormControl('', [Validators.required]),
-    imageData: new FormControl('', [Validators.required]),
     date: new FormControl<Date | undefined>(undefined, [Validators.required]),
     latitude: new FormControl(0, [
       Validators.required,
@@ -76,8 +79,7 @@ export class UploadPictureComponent {
   }
 
   imageCropped(event: ImageCroppedEvent) {
-    this.croppedImage = event.base64;
-    this.pictureForm.controls['imageData'].setValue(this.croppedImage);
+    this.croppedImage = event.blob;
   }
 
   cropperReady() {}
@@ -101,16 +103,16 @@ export class UploadPictureComponent {
       id: null,
       latitude: this.pictureForm.controls['latitude'].value!,
       longitude: this.pictureForm.controls['longitude'].value!,
-    }
+    };
     const picture: Picture = {
       id: null,
       title: this.pictureForm.controls['title'].value!,
       description: this.pictureForm.controls['description'].value!,
-      imageData: this.pictureForm.controls['imageData'].value!,
       dateTaken: this.pictureForm.controls['date'].value!,
       geolocation: geolocation,
+      fileData: null,
     };
-    this.picturesService.sendPicture(picture).subscribe({
+    this.picturesService.sendPicture(picture, this.croppedImage).subscribe({
       next: (response) => {
         console.log(response);
         this.closeDialog.emit();
