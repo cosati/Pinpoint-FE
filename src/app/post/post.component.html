@@ -1,9 +1,8 @@
-<mat-card appearance="outlined">
+<mat-card appearance="outlined" class="post-dialog">
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <div *ngIf="!isLoading">
-    <mat-card-header>
+    <mat-card-header class="post-title">
       <mat-card-title>{{ picture!.title }}</mat-card-title>
-      <mat-card-subtitle>{{ picture!.dateTaken }}</mat-card-subtitle>
       <button
         mat-icon-button
         [matMenuTriggerFor]="menu"
@@ -26,7 +25,10 @@
       class="post-image"
     />
     <mat-card-content>
-      <p>
+      <mat-card-subtitle class="post-date">{{
+        picture!.dateTaken | date
+      }}</mat-card-subtitle>
+      <p class="post-description">
         {{ picture!.description }}
       </p>
     </mat-card-content>
