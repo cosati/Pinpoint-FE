@@ -89,7 +89,7 @@ export class MapComponent implements OnInit {
   // TODO: Do not insert temporary marker if Popup is open.
   private insertTemporaryMarkerIntoMap(event: L.LeafletMouseEvent) {
     var markerIcon = L.icon({
-      iconUrl: 'assets/icons/marker-opaque.png',
+      iconUrl: 'assets/icons/temporary-marker.png',
 
       iconSize: [32, 32],
       iconAnchor: [16, 32],
