@@ -3,6 +3,7 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnInit,
   Output,
   ViewChild,
 } from '@angular/core';
@@ -24,6 +25,10 @@ import {
   LoadedImage,
 } from 'ngx-image-cropper';
 import { Geolocation } from '../models/geolocation.model';
+import { Pin } from '../models/pin.model';
+import { PinService } from '../services/pin.service';
+import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-upload-picture',
@@ -33,11 +38,13 @@ import { Geolocation } from '../models/geolocation.model';
     FormsModule,
     ReactiveFormsModule,
     ImageCropperComponent,
+    MatSelectModule,
+    MatIconModule,
   ],
   templateUrl: './upload-picture.component.html',
   styleUrl: './upload-picture.component.scss',
 })
-export class UploadPictureComponent {
+export class UploadPictureComponent implements OnInit {
   @Input() initialCoordinates: L.LatLng = L.latLng(0, 0);
   @Output() add = new EventEmitter<Picture>();
   @Output() changedCoordinates = new EventEmitter<L.LatLng>();
@@ -49,12 +56,15 @@ export class UploadPictureComponent {
 
   today = new Date().toJSON().split('T')[0];
 
+  pins: Pin[] = [];
+
   private readonly numberValidator = Validators.pattern(/^-?\d+|$^/);
 
   pictureForm = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.minLength(4)]),
     description: new FormControl('', [Validators.required]),
     date: new FormControl<Date | undefined>(undefined, [Validators.required]),
+    pin: new FormControl,
     latitude: new FormControl(0, [
       Validators.required,
       this.numberValidator,
@@ -67,7 +77,10 @@ export class UploadPictureComponent {
     ]),
   });
 
-  constructor(private picturesService: PicturesService) {}
+  constructor(
+    private picturesService: PicturesService,
+    private pinService: PinService
+  ) {}
 
   ngOnInit(): void {
     this.pictureForm.controls['latitude']!.setValue(
@@ -76,6 +89,14 @@ export class UploadPictureComponent {
     this.pictureForm.controls['longitude']!.setValue(
       this.initialCoordinates.lng
     );
+
+    this.pinService.getPins().subscribe({
+      next: (pins) => {
+        this.pins = pins;
+      },
+      error: (error) => console.log(error),
+      complete: () => console.log('Fetched pins from server.'),
+    });
   }
 
   imageCropped(event: ImageCroppedEvent) {
@@ -107,6 +128,7 @@ export class UploadPictureComponent {
     const picture: Picture = {
       id: null,
       title: this.pictureForm.controls['title'].value!,
+      pin: this.pictureForm.controls['pin'].value,
       description: this.pictureForm.controls['description'].value!,
       dateTaken: this.pictureForm.controls['date'].value!,
       geolocation: geolocation,
@@ -118,7 +140,7 @@ export class UploadPictureComponent {
         this.closeDialog.emit();
         this.add.emit(response);
       },
-      error: (error) => console.log(error),
+      error: (error) => console.log('Error uploading picture: ', error),
       complete: () => console.log('Picture added.'),
     });
   }

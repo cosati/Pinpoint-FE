@@ -36,6 +36,16 @@
         </div>
 
         <div class="input-row">
+          <label class="form-label">Pin Color</label>
+          <mat-select formControlName="pin">
+            <mat-option *ngFor="let pin of pins" [value]="pin">
+              <img src="http://localhost:8080{{ pin.url }}" />
+              {{ pin.color }}
+            </mat-option>
+          </mat-select>
+        </div>
+
+        <div class="input-row">
           <label for="description" class="form-label">Description</label>
           <textarea
             class="form-control"

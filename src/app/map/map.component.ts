@@ -89,8 +89,7 @@ export class MapComponent implements OnInit {
   // TODO: Do not insert temporary marker if Popup is open.
   private insertTemporaryMarkerIntoMap(event: L.LeafletMouseEvent) {
     var markerIcon = L.icon({
-      iconUrl: 'assets/icons/temporary-marker.png',
-
+      iconUrl: 'assets/icons/temporary-marker.svg',
       iconSize: [32, 32],
       iconAnchor: [16, 32],
       shadowAnchor: [4, 62],
@@ -125,8 +124,12 @@ export class MapComponent implements OnInit {
   }
 
   public plotNewLocation(picture: Picture): void {
+    var pinIcon = 'assets/icons/default-marker.svg';
+    if (picture.pin != null) {
+      pinIcon = 'http://localhost:8080' + picture.pin.url;
+    }
     var markerIcon = L.icon({
-      iconUrl: 'assets/icons/marker.png',
+      iconUrl: pinIcon,
 
       iconSize: [32, 32],
       iconAnchor: [16, 32],
