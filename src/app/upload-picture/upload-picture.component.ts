@@ -29,11 +29,12 @@ import { Pin } from '../models/pin.model';
 import { PinService } from '../services/pin.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {provideNativeDateAdapter} from '@angular/material/core';
-import {MatButtonModule} from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-upload-picture',
@@ -46,10 +47,11 @@ import {MatButtonModule} from '@angular/material/button';
     ImageCropperComponent,
     MatSelectModule,
     MatIconModule,
-    MatFormFieldModule, 
+    MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
     MatButtonModule,
+    MatCardModule,
   ],
   templateUrl: './upload-picture.component.html',
   styleUrl: './upload-picture.component.scss',
@@ -74,7 +76,7 @@ export class UploadPictureComponent implements OnInit {
     title: new FormControl('', [Validators.required, Validators.minLength(4)]),
     description: new FormControl('', [Validators.required]),
     date: new FormControl<Date | undefined>(undefined, [Validators.required]),
-    pin: new FormControl,
+    pin: new FormControl(),
     latitude: new FormControl(0, [
       Validators.required,
       this.numberValidator,

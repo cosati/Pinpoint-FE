@@ -1,19 +1,11 @@
-.input-message {
-  font-size: 12px;
-}
-
 .input-row {
-  margin-bottom: 8px;
-}
-
-.image-container {
-  margin-bottom: 10px;
-}
-
-.uploaded-image {
-  margin: 0 auto;
+  margin-top: 8px;
 }
 
 mat-form-field {
   width: 100%;
+}
+
+.cropper {
+  max-width: 350px;
 }

@@ -1,146 +1,147 @@
-<div class="card container">
-  <div class="card-body row">
-    <div class="col">
-      <h5 class="card-title">Upload New Picture</h5>
-      <form (ngSubmit)="onSubmit()" [formGroup]="pictureForm">
-        <div class="mb-3">
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Upload New Picture</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form (ngSubmit)="onSubmit()" [formGroup]="pictureForm">
+      <div class="mb-3">
+        <input
+          class="form-control"
+          type="file"
+          accept="image/*"
+          id="formFile"
+          (change)="onChange($event)"
+          #inputFile
+        />
+      </div>
+
+      <div *ngIf="imageChangedEvent" class="cropper">
+        <image-cropper
+          [aspectRatio]="1"
+          [imageChangedEvent]="imageChangedEvent"
+          [resizeToWidth]="1080"
+          [resizeToHeight]="1080"
+          (imageCropped)="imageCropped($event)"
+          (imageLoaded)="imageLoaded($event)"
+          (cropperReady)="cropperReady()"
+          (loadImageFailed)="loadImageFailed()"
+        ></image-cropper>
+      </div>
+
+      <div class="input-row">
+        <mat-form-field>
+          <mat-label>Title</mat-label>
           <input
-            class="form-control"
-            type="file"
-            accept="image/*"
-            id="formFile"
-            (change)="onChange($event)"
-            #inputFile
+            matInput
+            placeholder="Title of your picture"
+            formControlName="title"
+            required
           />
-        </div>
+          @if (isInputInvalid(pictureForm.controls['title'])) {
+          <mat-error>Title must be at least 4 characters long</mat-error>
+          }
+        </mat-form-field>
+      </div>
 
-        <div class="input-row">
-          <mat-form-field>
-            <mat-label>Title</mat-label>
-            <input
-              matInput
-              placeholder="Title of your picture"
-              formControlName="title"
-              required
-            />
-            @if (isInputInvalid(pictureForm.controls['title'])) {
-            <mat-error>Title must be at least 4 characters long</mat-error>
-            }
-          </mat-form-field>
-        </div>
+      <div class="input-row">
+        <mat-form-field>
+          <mat-label>Pin color</mat-label>
+          <mat-select formControlName="pin">
+            <mat-option *ngFor="let pin of pins" [value]="pin">
+              <img src="http://localhost:8080{{ pin.url }}" />
+              {{ pin.color }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
-        <div class="input-row">
-          <mat-form-field>
-            <mat-label>Pin color</mat-label>
-            <mat-select formControlName="pin">
-              <mat-option *ngFor="let pin of pins" [value]="pin">
-                <img src="http://localhost:8080{{ pin.url }}" />
-                {{ pin.color }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+      <div class="input-row">
+        <mat-form-field>
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description"></textarea>
+          @if (isInputInvalid(pictureForm.controls['description'])) {
+          <mat-error>Description is required.</mat-error>
+          }
+        </mat-form-field>
+      </div>
 
-        <div class="input-row">
-          <mat-form-field>
-            <mat-label>Description</mat-label>
-            <textarea matInput formControlName="description"></textarea>
-            @if (isInputInvalid(pictureForm.controls['description'])) {
-            <mat-error>Description is required.</mat-error>
-            }
-          </mat-form-field>
-        </div>
+      <div class="input-row">
+        <mat-form-field>
+          <mat-label>When was the picture taken?</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="date"
+            [max]="today"
+            required
+          />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          @if (isInputInvalid(pictureForm.controls['date'])) {
+          <mat-error>Description is required.</mat-error>
+          }
+        </mat-form-field>
+      </div>
 
-        <div class="input-row">
-          <mat-form-field>
-            <mat-label>When was the picture taken?</mat-label>
-            <input
-              matInput
-              [matDatepicker]="picker"
-              formControlName="date"
-              [max]="today"
-              required
-            />
-            <mat-datepicker-toggle
-              matIconSuffix
-              [for]="picker"
-            ></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            @if (isInputInvalid(pictureForm.controls['date'])) {
-            <mat-error>Description is required.</mat-error>
-            }
-          </mat-form-field>
-        </div>
+      <div class="input-row">
+        <mat-form-field>
+          <mat-label>Latitude</mat-label>
+          <input
+            matInput
+            (change)="onChangeCoordinates()"
+            type="number"
+            formControlName="latitude"
+            [min]="-90"
+            [max]="90"
+            required
+          />
+          @if (isInputInvalid(pictureForm.controls['latitude'])) {
+          <mat-error>Invalid latitude.</mat-error>
+          }
+        </mat-form-field>
+      </div>
 
-        <div class="input-row">
-          <mat-form-field>
-            <mat-label>Latitude</mat-label>
-            <input
-              matInput
-              (change)="onChangeCoordinates()"
-              type="number"
-              formControlName="latitude"
-              [min]="-90"
-              [max]="90"
-              required
-            />
-            @if (isInputInvalid(pictureForm.controls['latitude'])) {
-            <mat-error>Invalid latitude.</mat-error>
-            }
-          </mat-form-field>
-        </div>
+      <div class="input-row">
+        <mat-form-field>
+          <mat-label>Longitude</mat-label>
+          <input
+            matInput
+            (change)="onChangeCoordinates()"
+            type="number"
+            formControlName="longitude"
+            [min]="-180"
+            [max]="180"
+            required
+          />
+          @if (isInputInvalid(pictureForm.controls['longitude'])) {
+          <mat-error>Invalid latitude.</mat-error>
+          }
+        </mat-form-field>
+      </div>
 
-        <div class="input-row">
-          <mat-form-field>
-            <mat-label>Longitude</mat-label>
-            <input
-              matInput
-              (change)="onChangeCoordinates()"
-              type="number"
-              formControlName="longitude"
-              [min]="-180"
-              [max]="180"
-              required
-            />
-            @if (isInputInvalid(pictureForm.controls['longitude'])) {
-            <mat-error>Invalid latitude.</mat-error>
-            }
-          </mat-form-field>
-        </div>
-
-        <p class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <button
-            mat-button
-            color="warn"
-            id="cancel-button"
-            type="button"
-            (click)="onCancel()"
-          >
-            Cancel
-          </button>
-          <button
-            mat-button
-            color="primary"
-            id="upload-button"
-            type="submit"
-            [disabled]="!pictureForm.valid"
-          >
-            Upload
-          </button>
-        </p>
-      </form>
-    </div>
-    <div class="col" *ngIf="imageChangedEvent">
-      <image-cropper
-        [aspectRatio]="1"
-        [imageChangedEvent]="imageChangedEvent"
-        [resizeToWidth]="1080"
-        [resizeToHeight]="1080"
-        (imageCropped)="imageCropped($event)"
-        (imageLoaded)="imageLoaded($event)"
-        (cropperReady)="cropperReady()"
-        (loadImageFailed)="loadImageFailed()"
-      ></image-cropper>
-    </div>
-  </div>
-</div>
+      <p class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button
+          mat-button
+          color="warn"
+          id="cancel-button"
+          type="button"
+          (click)="onCancel()"
+        >
+          Cancel
+        </button>
+        <button
+          mat-button
+          color="primary"
+          id="upload-button"
+          type="submit"
+          [disabled]="!pictureForm.valid"
+        >
+          Upload
+        </button>
+      </p>
+    </form>
+  </mat-card-content>
+</mat-card>
