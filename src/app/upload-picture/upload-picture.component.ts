@@ -29,10 +29,16 @@ import { Pin } from '../models/pin.model';
 import { PinService } from '../services/pin.service';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {provideNativeDateAdapter} from '@angular/material/core';
+import {MatButtonModule} from '@angular/material/button';
 
 @Component({
   selector: 'app-upload-picture',
   standalone: true,
+  providers: [provideNativeDateAdapter()],
   imports: [
     CommonModule,
     FormsModule,
@@ -40,6 +46,10 @@ import { MatIconModule } from '@angular/material/icon';
     ImageCropperComponent,
     MatSelectModule,
     MatIconModule,
+    MatFormFieldModule, 
+    MatInputModule,
+    MatDatepickerModule,
+    MatButtonModule,
   ],
   templateUrl: './upload-picture.component.html',
   styleUrl: './upload-picture.component.scss',

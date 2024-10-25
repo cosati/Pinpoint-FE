@@ -15,111 +15,114 @@
         </div>
 
         <div class="input-row">
-          <label for="title" class="form-label">Title</label>
-          <input
-            type="text"
-            class="form-control"
-            [ngClass]="{
-              'is-invalid': isInputInvalid(pictureForm.controls['title'])
-            }"
-            id="title"
-            name="title"
-            formControlName="title"
-            required
-          />
-          <div
-            *ngIf="isInputInvalid(pictureForm.controls['title'])"
-            class="text-danger input-message"
-          >
-            Title must be at least 4 characters long
-          </div>
+          <mat-form-field>
+            <mat-label>Title</mat-label>
+            <input
+              matInput
+              placeholder="Title of your picture"
+              formControlName="title"
+              required
+            />
+            @if (isInputInvalid(pictureForm.controls['title'])) {
+            <mat-error>Title must be at least 4 characters long</mat-error>
+            }
+          </mat-form-field>
         </div>
 
         <div class="input-row">
-          <label class="form-label">Pin Color</label>
-          <mat-select formControlName="pin">
-            <mat-option *ngFor="let pin of pins" [value]="pin">
-              <img src="http://localhost:8080{{ pin.url }}" />
-              {{ pin.color }}
-            </mat-option>
-          </mat-select>
+          <mat-form-field>
+            <mat-label>Pin color</mat-label>
+            <mat-select formControlName="pin">
+              <mat-option *ngFor="let pin of pins" [value]="pin">
+                <img src="http://localhost:8080{{ pin.url }}" />
+                {{ pin.color }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
 
         <div class="input-row">
-          <label for="description" class="form-label">Description</label>
-          <textarea
-            class="form-control"
-            [ngClass]="{
-              'is-invalid': isInputInvalid(pictureForm.controls['description'])
-            }"
-            id="description"
-            name="description"
-            formControlName="description"
-          ></textarea>
+          <mat-form-field>
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+            @if (isInputInvalid(pictureForm.controls['description'])) {
+            <mat-error>Description is required.</mat-error>
+            }
+          </mat-form-field>
         </div>
 
         <div class="input-row">
-          <label for="date" class="form-label">Date</label>
-          <input
-            type="date"
-            class="form-control"
-            [ngClass]="{
-              'is-invalid': isInputInvalid(pictureForm.controls['date'])
-            }"
-            [max]="today"
-            id="date"
-            name="date"
-            formControlName="date"
-          />
+          <mat-form-field>
+            <mat-label>When was the picture taken?</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="date"
+              [max]="today"
+              required
+            />
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            @if (isInputInvalid(pictureForm.controls['date'])) {
+            <mat-error>Description is required.</mat-error>
+            }
+          </mat-form-field>
         </div>
 
         <div class="input-row">
-          <label for="latitude" class="form-label">Latitude</label>
-          <input
-            (change)="onChangeCoordinates()"
-            type="number"
-            min="-90"
-            max="90"
-            class="form-control"
-            [ngClass]="{
-              'is-invalid': isInputInvalid(pictureForm.controls['latitude'])
-            }"
-            id="latitude-input"
-            name="latitude"
-            formControlName="latitude"
-          />
+          <mat-form-field>
+            <mat-label>Latitude</mat-label>
+            <input
+              matInput
+              (change)="onChangeCoordinates()"
+              type="number"
+              formControlName="latitude"
+              [min]="-90"
+              [max]="90"
+              required
+            />
+            @if (isInputInvalid(pictureForm.controls['latitude'])) {
+            <mat-error>Invalid latitude.</mat-error>
+            }
+          </mat-form-field>
         </div>
 
         <div class="input-row">
-          <label for="logitude" class="form-label">Longitude</label>
-          <input
-            (change)="onChangeCoordinates()"
-            type="number"
-            min="-180"
-            max="180"
-            class="form-control"
-            [ngClass]="{
-              'is-invalid': isInputInvalid(pictureForm.controls['longitude'])
-            }"
-            id="longitude-input"
-            name="longitude"
-            formControlName="longitude"
-          />
+          <mat-form-field>
+            <mat-label>Longitude</mat-label>
+            <input
+              matInput
+              (change)="onChangeCoordinates()"
+              type="number"
+              formControlName="longitude"
+              [min]="-180"
+              [max]="180"
+              required
+            />
+            @if (isInputInvalid(pictureForm.controls['longitude'])) {
+            <mat-error>Invalid latitude.</mat-error>
+            }
+          </mat-form-field>
         </div>
 
         <p class="d-grid gap-2 d-md-flex justify-content-md-end">
           <button
+            mat-button
+            color="warn"
             id="cancel-button"
             type="button"
-            class="btn btn-outline-primary"
             (click)="onCancel()"
           >
             Cancel
           </button>
           <button
+            mat-button
+            color="primary"
             id="upload-button"
             type="submit"
-            class="btn btn-primary"
             [disabled]="!pictureForm.valid"
           >
             Upload
