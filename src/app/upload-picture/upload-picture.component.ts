@@ -35,6 +35,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-upload-picture',
@@ -52,6 +53,7 @@ import { MatCardModule } from '@angular/material/card';
     MatDatepickerModule,
     MatButtonModule,
     MatCardModule,
+    MatSnackBarModule,
   ],
   templateUrl: './upload-picture.component.html',
   styleUrl: './upload-picture.component.scss',
@@ -91,7 +93,8 @@ export class UploadPictureComponent implements OnInit {
 
   constructor(
     private picturesService: PicturesService,
-    private pinService: PinService
+    private pinService: PinService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -122,8 +125,8 @@ export class UploadPictureComponent implements OnInit {
   }
 
   loadImageFailed() {
-    // TODO: Display error on UI.
-    console.log('Error uploading image!');
+    this.snackBar.open('Could not load image', 'Close');
+    console.log('Error uploading image.');
   }
 
   onChange(event: any) {
