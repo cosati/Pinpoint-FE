@@ -4,6 +4,10 @@ import { Picture } from '../models/picture.model';
 import { PicturesService } from '../services/pictures.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PostComponent } from '../post/post.component';
+import { catchError, of } from 'rxjs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { CommonModule } from '@angular/common';
 
 const MAX_ZOOM = 18;
 const MIN_ZOOM = 2;
@@ -11,7 +15,7 @@ const MIN_ZOOM = 2;
 @Component({
   selector: 'app-map',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, MatProgressSpinnerModule, MatSnackBarModule],
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss',
 })
@@ -22,13 +26,18 @@ export class MapComponent implements OnInit {
   pictures: Picture[] = [];
   error: string | null = null;
 
+  isLoading = false;
+
   private map: any;
   private markers = new Map<number, L.Marker>();
   private temporaryMarker: L.Marker | null = null;
 
   private postDialog = inject(MatDialog);
 
-  constructor(private picturesService: PicturesService) {}
+  constructor(
+    private picturesService: PicturesService,
+    private snackBar: MatSnackBar
+  ) {}
 
   private initMap(): void {
     // TODO: Center initially on user's location if no pictures.
@@ -196,14 +205,24 @@ export class MapComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.picturesService.getPictures().subscribe({
-      next: (pictures) => {
-        this.pictures = pictures;
-        this.initMap();
-        this.plotLocations();
-      },
-      error: (error) => console.log(error),
-      complete: () => console.log('Fetched pictures from server.'),
-    });
+    this.initMap();
+    this.isLoading = true;
+    this.picturesService
+      .getPictures()
+      .pipe(
+        catchError((error) => {
+          console.error('Error getting pictures:', error);
+          this.snackBar.open('Could not load markers', 'Close');
+          return of([]);
+        })
+      )
+      .subscribe({
+        next: (pictures) => (this.pictures = pictures),
+        complete: () => {
+          console.log('Initializing Map');
+          this.isLoading = false;
+          this.plotLocations();
+        },
+      });
   }
 }

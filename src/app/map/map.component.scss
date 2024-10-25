@@ -9,3 +9,10 @@
 #map {
   height: 100%;
 }
+
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1000;
+}
