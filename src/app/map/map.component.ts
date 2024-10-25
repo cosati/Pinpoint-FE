@@ -153,6 +153,9 @@ export class MapComponent implements OnInit {
     )
       .bindTooltip(picture.title, { offset: [16, -16] })
       .on('click', () => {
+        this.focusOnCoordinate(
+          L.latLng(picture.geolocation.latitude, picture.geolocation.longitude)
+        );
         this.openPostDialog(picture.id);
       })
       .addTo(this.map);
@@ -168,6 +171,10 @@ export class MapComponent implements OnInit {
     dialogRef.componentInstance.onDeletePicture.subscribe((picture) =>
       this.onPictureDeleted(picture)
     );
+  }
+
+  focusOnCoordinate(coordinates: L.LatLng) {
+    this.map.setView(coordinates, MAX_ZOOM);
   }
 
   onPictureDeleted(deletedPicture: Picture) {
