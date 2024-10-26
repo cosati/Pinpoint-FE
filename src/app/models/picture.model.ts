@@ -9,5 +9,5 @@ export interface Picture {
   dateTaken: Date | undefined;
   geolocation: Geolocation;
   fileData: FileData | null;
-  pin: Pin | null;
+  pin: Pin | null | undefined;
 }

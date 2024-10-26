@@ -52,7 +52,8 @@ export class PicturesService {
     formData.append('file', file, 'image.png');
     return this.httpClient
       .post<Picture>(this.baseUrl + 'addPicture', formData, {
-        headers: { 'enctype': 'multipart/form-data' }})
+        headers: { enctype: 'multipart/form-data' },
+      })
       .pipe(catchError(this.handleError('sendPicture', picture)));
   }
 
@@ -60,7 +61,11 @@ export class PicturesService {
     this.pictures.update((oldPictures) => [...oldPictures, pictureData]);
   }
 
-  updatePicture() {}
+  updatePicture(picture: Picture): Observable<Picture> {
+    return this.httpClient
+      .put<Picture>(this.baseUrl + 'updatePicture', picture, this.httpOptions)
+      .pipe(catchError(this.handleError('updatePicture', picture)));
+  }
 
   private handleError(operation = 'operation', result?: any) {
     return (error: any): Observable<any> => {

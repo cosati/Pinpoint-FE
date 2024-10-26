@@ -1,36 +1,109 @@
 <mat-card appearance="outlined" class="post-dialog">
   <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <div *ngIf="!isLoading">
-    <mat-card-header class="post-title">
-      <mat-card-title>{{ picture!.title }}</mat-card-title>
-      <button
-        mat-icon-button
-        [matMenuTriggerFor]="menu"
-        aria-label="Options"
-        class="options-menu"
-      >
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="onDelete()">
-          <mat-icon>delete</mat-icon>
-          <span>Delete Post</span>
+  <form [formGroup]="pictureForm">
+    <div *ngIf="!isLoading">
+      <mat-card-header class="post-title" *ngIf="!isEditing">
+        <mat-card-title>{{ picture!.title }}</mat-card-title>
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="menu"
+          aria-label="Options"
+          class="options-menu"
+          *ngIf="!isEditing"
+        >
+          <mat-icon>more_vert</mat-icon>
         </button>
-      </mat-menu>
-    </mat-card-header>
-    <img
-      mat-card-image
-      src="http://localhost:8080{{ picture?.fileData?.url }}"
-      alt="{{ picture?.title }}"
-      class="post-image"
-    />
-    <mat-card-content>
-      <mat-card-subtitle class="post-date">{{
-        picture!.dateTaken | date
-      }}</mat-card-subtitle>
-      <p class="post-description">
-        {{ picture!.description }}
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="onDelete()">
+            <mat-icon>delete</mat-icon>
+            <span>Delete Post</span>
+          </button>
+          <button mat-menu-item (click)="onEdit()">
+            <mat-icon>edit</mat-icon>
+            <span>Edit Post</span>
+          </button>
+        </mat-menu>
+      </mat-card-header>
+
+      <img
+        mat-card-image
+        src="http://localhost:8080{{ picture?.fileData?.url }}"
+        alt="{{ picture?.title }}"
+        class="post-image"
+      />
+
+      <mat-card-content *ngIf="!isEditing">
+        <mat-card-subtitle class="post-date">{{
+          picture!.dateTaken | date
+        }}</mat-card-subtitle>
+        <p class="post-description">
+          {{ picture!.description }}
+        </p>
+      </mat-card-content>
+
+      <mat-card-content *ngIf="isEditing">
+        <mat-form-field>
+          <mat-label>Title</mat-label>
+          <input
+            matInput
+            placeholder="Title of your picture"
+            formControlName="title"
+            required
+          />
+        </mat-form-field>
+        
+        <mat-form-field>
+          <mat-label>Pin color</mat-label>
+          <mat-select formControlName="pin">
+            <mat-option *ngFor="let pin of pins" [value]="pin.color">
+              <img src="http://localhost:8080{{ pin.url }}" />
+              {{ pin.color }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="date"
+            [max]="today"
+            required
+          />
+          <mat-datepicker-toggle
+            matIconSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          @if (false) {
+          <mat-error>Description is required.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description"></textarea>
+          @if (false) {
+          <mat-error>Description is required.</mat-error>
+          }
+        </mat-form-field>
+      </mat-card-content>
+    </div>
+    <mat-card-footer>
+      <p
+        class="d-grid gap-2 d-md-flex justify-content-md-end buttons"
+        *ngIf="!isEditing"
+      >
+        <button mat-button (click)="onClose()">Close</button>
       </p>
-    </mat-card-content>
-  </div>
+      <p
+        class="d-grid gap-2 d-md-flex justify-content-md-end buttons"
+        *ngIf="isEditing"
+      >
+        <button mat-button (click)="onCancelEdit()">Cancel</button>
+        <button mat-button (click)="onSave()">Save</button>
+      </p>
+    </mat-card-footer>
+  </form>
 </mat-card>
